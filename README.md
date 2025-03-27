@@ -1,4 +1,4 @@
-# Rice Purity App
+# Rice Purity site
 
 A modern, clean implementation of the Rice Purity Test with enhanced features like faculty selection, score analytics, and user suggestions. This is specifically tailored for Queen's University and also not associated with the University in any way.
 
