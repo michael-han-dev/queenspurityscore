@@ -8,6 +8,47 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Rice Purity Test',
   description: 'A modern implementation of the Rice Purity Test with enhanced features',
+  
+  // Favicon and app icons
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/purity test.png', type: 'image/png' },
+    ],
+    apple: { url: '/purity test.png' },
+  },
+  
+  // Open Graph metadata
+  openGraph: {
+    title: 'Rice Purity Test | How Pure Are You?',
+    description: 'Take the Rice Purity Test and compare your score with others from various faculties',
+    images: [{
+      url: '/purity test.png',
+      width: 300,
+      height: 300,
+      alt: 'Rice Purity Test',
+    }],
+    locale: 'en_US',
+    type: 'website',
+  },
+  
+  // Twitter card metadata
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Rice Purity Test | How Pure Are You?',
+    description: 'Take the Rice Purity Test and compare your score with others from various faculties',
+    images: ['/purity test.png'],
+  },
+  
+  // Canonical URL (optional, but recommended)
+  alternates: {
+    canonical: 'https://yourwebsite.com',
+  },
+  
+  // Other useful metadata
+  keywords: ['rice purity test', 'purity test', 'faculty comparison', 'engineering purity'],
+  authors: [{ name: 'Your Name' }],
+  robots: 'index, follow',
 }
 
 export default function RootLayout({
