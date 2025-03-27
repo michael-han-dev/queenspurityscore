@@ -39,7 +39,3 @@ cp .env.example .env.local
 ```
 
 ``
-
-## License
-
-MIT
