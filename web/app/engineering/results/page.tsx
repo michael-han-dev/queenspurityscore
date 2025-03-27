@@ -69,7 +69,7 @@ export default function EngineeringResultsPage() {
           <header className="rice-header">
             <div className="flex flex-col items-center">
               <Image 
-                src="/images/purity test.png" 
+                src="/images/purity-test.png" 
                 alt="Rice Purity Test Logo"
                 width={200}
                 height={200}

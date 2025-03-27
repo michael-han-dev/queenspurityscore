@@ -14,7 +14,7 @@ export default function Home() {
           <header className="rice-header">
             <div className="title flex flex-col items-center">
               <Image 
-                src="/images/purity test.png" 
+                src="/images/purity-test.png" 
                 alt="Rice Purity Test Logo"
                 width={300}
                 height={300}
