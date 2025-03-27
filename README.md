@@ -18,14 +18,7 @@ This is a monorepo containing:
 
 ## Setup
 
-1. **Clone the repository**
-
-```bash
-git clone https://github.com/yourusername/rice-purity-app.git
-cd rice-purity-app
-```
-
-2. **Install dependencies**
+**Install dependencies**
 
 ```bash
 # Install frontend dependencies
@@ -38,34 +31,11 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 cd ..
 ```
-
-3. **Environment Variables**
+**Environment Variables**
 
 ```bash
 cp .env.example .env.local
 # Edit .env.local with your Firebase configuration
 ```
 
-4. **Run Development Servers**
-
-```bash
-# Run both frontend and backend
-pnpm dev
-
-# Or run individually
-pnpm dev:web
-pnpm dev:api
-```
-
-5. **Access the application**
-
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:5000
-
-## Firebase Setup
-
-See [Firebase Setup Guide](./FIREBASE_SETUP.md) for detailed instructions on configuring Firebase for this project.
-
-## License
-
-MIT
+``
