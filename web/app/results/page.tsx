@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import { getFacultyAvgScore } from '@/lib/firestoreService'
 
 export default function ResultsPage() {
   const searchParams = useSearchParams();
@@ -14,39 +15,49 @@ export default function ResultsPage() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Get parameters from URL
-    const scoreParam = searchParams.get('score');
-    const facultyParam = searchParams.get('faculty');
-    
-    if (scoreParam) {
-      setScore(parseInt(scoreParam, 10));
-    }
-    
-    if (facultyParam) {
-      setFaculty(facultyParam.charAt(0).toUpperCase() + facultyParam.slice(1));
-    }
-    
-    // Simulate loading average score from backend
-    setTimeout(() => {
-      // This would normally come from the backend API
-      const mockAvgScores: Record<string, number> = {
-        arts: 58,
-        business: 45,
-        engineering: 63,
-        medicine: 72,
-        science: 67,
-        other: 52
-      };
-      
-      if (facultyParam && facultyParam.toLowerCase() in mockAvgScores) {
-        setAvgScore(mockAvgScores[facultyParam.toLowerCase()]);
-      } else {
-        setAvgScore(55); // Default if faculty not found
+    const fetchData = async () => {
+      try {
+        // Get parameters from URL
+        const scoreParam = searchParams.get('score');
+        const facultyParam = searchParams.get('faculty');
+        
+        if (scoreParam) {
+          setScore(parseInt(scoreParam, 10));
+        }
+        
+        if (facultyParam) {
+          const formattedFaculty = facultyParam.charAt(0).toUpperCase() + facultyParam.slice(1);
+          setFaculty(formattedFaculty);
+          
+          // Fetch actual average score from Firebase
+          const avgScoreFromDB = await getFacultyAvgScore(facultyParam.toLowerCase());
+          setAvgScore(avgScoreFromDB);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Use fallback values if Firebase fetch fails
+        setAvgScore(getDefaultAvgScore(faculty.toLowerCase()));
+      } finally {
+        setLoading(false);
       }
-      
-      setLoading(false);
-    }, 500);
+    };
+    
+    fetchData();
   }, [searchParams]);
+  
+  // Fallback function for average scores if Firebase fails
+  const getDefaultAvgScore = (faculty: string): number => {
+    const mockAvgScores: Record<string, number> = {
+      arts: 58,
+      business: 45,
+      engineering: 63,
+      medicine: 72,
+      science: 67,
+      other: 52
+    };
+    
+    return mockAvgScores[faculty] || 60;
+  };
   
   // Function to get message based on score
   const getScoreMessage = (score: number) => {

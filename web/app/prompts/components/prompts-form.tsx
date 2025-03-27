@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Link from 'next/link'
+import { saveScore } from '@/lib/firestoreService'
 
 // Full list of Rice Purity Test questions
 const questions = [
@@ -146,14 +147,27 @@ export function PromptsForm() {
       // Calculate score: 100 minus the percentage of checked boxes
       const checkedCount = checkedPrompts.filter(checked => checked).length;
       const score = Math.round(100 - (checkedCount / questions.length * 100));
+      
+      console.log('Submitting score:', score, 'for faculty:', faculty);
 
-      // In a real app, this would be submitted to the backend
-      console.log({ score, faculty, checkedCount });
+      // Save score to Firebase
+      const result = await saveScore({ 
+        score, 
+        faculty 
+      });
+      
+      console.log('Score saved successfully, ID:', result);
 
-      // For demo purposes, navigate to results without actual submission
+      // Navigate to results
       router.push(`/results?score=${score}&faculty=${faculty}`);
     } catch (error) {
+      // More detailed error information
       console.error("Error submitting score:", error);
+      if (error instanceof Error) {
+        console.error('Error name:', error.name);
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+      }
       alert("There was an error submitting your score. Please try again.");
       setIsSubmitting(false);
     }
