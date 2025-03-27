@@ -149,4 +149,77 @@
   @apply text-center border-4 rounded-full w-32 h-32 sm:w-48 sm:h-48 flex items-center justify-center mx-auto;
   border-color: #9e9176;
   background-color: #d4c9a8;
+}
+
+/* Ad container styling - add this to your existing CSS */
+.ad-container, .ad-container-square, .ad-container-in-article {
+  background-color: rgba(248, 243, 230, 0.7);
+  border: 1px solid #9e9176;
+  border-radius: 4px;
+  padding: 10px;
+  margin: 1.5rem auto;
+  max-width: 100%;
+  overflow: hidden;
+  transition: background-color 0.3s;
+}
+
+.ad-container:hover, .ad-container-square:hover, .ad-container-in-article:hover {
+  background-color: rgba(248, 243, 230, 0.9);
+}
+
+.ad-container-square {
+  max-width: 336px; /* Common square ad size */
+}
+
+.ad-container-in-article {
+  max-width: 720px; /* Common in-article ad size */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .ad-container, .ad-container-square, .ad-container-in-article {
+    padding: 6px;
+  }
+}
+
+/* Add these styles to your globals.css */
+.page-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.ad-sidebar {
+  position: sticky;
+  top: 20px;
+  width: 160px;
+  min-height: 600px;
+  background-color: rgba(248, 243, 230, 0.7);
+  border: 1px solid #9e9176;
+  border-radius: 4px;
+  padding: 10px;
+  overflow: hidden;
+  transition: background-color 0.3s;
+  margin: 0 10px;
+}
+
+.ad-sidebar:hover {
+  background-color: rgba(248, 243, 230, 0.9);
+}
+
+.ad-sidebar-left {
+  margin-right: 20px;
+}
+
+.ad-sidebar-right {
+  margin-left: 20px;
+}
+
+/* Media query to hide side ads on smaller screens */
+@media (max-width: 1200px) {
+  .ad-sidebar {
+    display: none;
+  }
 } 
