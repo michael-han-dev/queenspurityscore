@@ -13,25 +13,27 @@ export const metadata: Metadata = {
   // Favicon and app icons
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/purity-test.png', type: 'image/png' },
+      { url: 'https://queenspuritytest.com/favicon.ico', sizes: 'any' },
+      { url: 'https://queenspuritytest.com/images/purity-test.png', type: 'image/png' },
     ],
-    shortcut: '/favicon.ico',
-    apple: { url: '/purity-test.png', sizes: '180x180' },
+    shortcut: 'https://queenspuritytest.com/favicon.ico',
+    apple: { url: 'https://queenspuritytest.com/images/purity-test.png', sizes: '180x180' },
   },
   
   // Open Graph metadata
   openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://queenspuritytest.com',
     title: 'Rice Purity Test | How Pure Are You?',
     description: 'Take the Rice Purity Test and compare your score with others from various faculties',
+    siteName: 'Queen\'s University Purity Test',
     images: [{
-      url: '/reddit.png',
+      url: 'https://queenspuritytest.com/reddit.png',
       width: 1200,
       height: 630,
       alt: 'Queen\'s University Purity Test',
     }],
-    locale: 'en_US',
-    type: 'website',
   },
   
   // Twitter card metadata
@@ -39,7 +41,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Rice Purity Test | How Pure Are You?',
     description: 'Take the Rice Purity Test and compare your score with others from various faculties',
-    images: ['/reddit.png'],
+    images: ['https://queenspuritytest.com/reddit.png'],
   },
   
   alternates: {
