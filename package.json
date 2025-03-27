@@ -1,0 +1,23 @@
+{
+  "name": "rice-purity-app",
+  "version": "1.0.0",
+  "description": "Rice Purity Test App with enhanced features",
+  "private": true,
+  "workspaces": [
+    "web"
+  ],
+  "scripts": {
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "cd api && flask run",
+    "dev": "concurrently \"pnpm dev:web\" \"pnpm dev:api\"",
+    "build:web": "pnpm --filter web build",
+    "lint": "pnpm --filter web lint"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+} 
