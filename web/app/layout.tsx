@@ -18,11 +18,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5330176235227654"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                if (window.adsbygoogleInit === true) return;
+                window.adsbygoogleInit = true;
+                var script = document.createElement('script');
+                script.async = true;
+                script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5330176235227654';
+                script.crossOrigin = 'anonymous';
+                document.head.appendChild(script);
+              })();
+            `
+          }}
         />
       </head>
       <body className={inter.className}>

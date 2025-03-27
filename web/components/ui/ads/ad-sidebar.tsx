@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface AdSidebarProps {
   adSlot: string;
@@ -10,23 +10,34 @@ interface AdSidebarProps {
 
 export function AdSidebar({ adSlot, position, className = "" }: AdSidebarProps) {
   const adRef = useRef<HTMLDivElement>(null);
+  const [adLoaded, setAdLoaded] = useState(false);
 
   useEffect(() => {
-    if (adRef.current && typeof window !== 'undefined') {
+    // Only try to load the ad once
+    if (adRef.current && !adLoaded && typeof window !== 'undefined') {
       try {
-        // @ts-ignore
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        // Check if this element already has an ad
+        if (!adRef.current.querySelector('iframe')) {
+          // Set a data attribute to track this specific ad slot
+          adRef.current.setAttribute('data-ad-slot-loaded', adSlot);
+          
+          // @ts-ignore
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+          
+          setAdLoaded(true);
+        }
       } catch (error) {
         console.error('Error loading AdSense ad:', error);
       }
     }
-  }, []);
+  }, [adSlot, adLoaded]);
 
   return (
     <div className={`ad-sidebar ad-sidebar-${position} ${className}`}>
       <p className="text-xs text-[#5d5345] mb-1 text-center">Advertisement</p>
-      <div ref={adRef} className="overflow-hidden">
+      <div className="overflow-hidden">
         <ins
+          ref={adRef}
           className="adsbygoogle"
           style={{ display: 'block' }}
           data-ad-client="ca-pub-5330176235227654"
