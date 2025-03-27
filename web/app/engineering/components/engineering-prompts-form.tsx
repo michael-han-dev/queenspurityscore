@@ -159,32 +159,42 @@ export function EngineeringPromptsForm() {
   };
 
   return (
-    <>
-      <div className="text-sm text-center mb-6 text-[#302616]">
-        <p className="mb-2">This test consists of {engineeringQuestions.length} engineering-specific statements.</p>
-      </div>
+    <div className="queens-purity-container">
+      {/*<header className="queens-header">
+        <h1 className="queens-title">
+          <span>The Official</span> Queen's Engineering Purity Test
+        </h1>
+      </header>*/}
 
-      {/* Prompt list with checkboxes */}
-      <div className="prompt-list">
-        <ol className="list-decimal pl-8 space-y-0.5">
-          {engineeringQuestions.map((question, index) => (
-            <li key={index} className="prompt-item">
-              <input
-                type="checkbox"
-                id={`prompt-${index}`}
-                className="prompt-checkbox"
-                checked={checkedPrompts[index]}
-                onChange={() => handleCheckboxChange(index)}
-              />
-              <label htmlFor={`prompt-${index}`} className="prompt-text">
-                <span className="font-medium mr-1">{index + 1}.</span> {question}
+
+      <p className="queens-caution">
+        Caution: This is not a bucket list. You are beyond cooked if you complete all the items on this list.
+      </p>
+
+      <p className="queens-instruction">
+        Your engineering purity score will be calculated at the end.
+      </p>
+
+      <div className="prompt-items">
+        {engineeringQuestions.map((prompt, index) => {
+          const questionNumber = index + 1;
+          
+          return (
+            <div key={index} className="prompt-item">
+              <label>
+                <span className="prompt-number">{questionNumber}.</span>
+                <input
+                  type="checkbox"
+                  checked={checkedPrompts[index]}
+                  onChange={() => handleCheckboxChange(index)}
+                />
+                <span className="prompt-text">{prompt}</span>
               </label>
-            </li>
-          ))}
-        </ol>
+            </div>
+          );
+        })}
       </div>
       
-      {/* Buttons section */}
       <div className="border-t border-[#d4c9a8] pt-6 mt-8">
         <div className="flex flex-col sm:flex-row gap-4 sm:justify-between buttons">
           <Button 
@@ -211,6 +221,6 @@ export function EngineeringPromptsForm() {
           </Link>
         </p>
       </div>
-    </>
+    </div>
   );
 } 

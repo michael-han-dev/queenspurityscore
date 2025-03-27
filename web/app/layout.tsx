@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: 'https://queenspuritytest.com/favicon.ico', sizes: 'any' },
-      { url: 'https://queenspuritytest.com/images/purity-test.png', type: 'image/png' },
+      { url: 'https://queenspuritytest.com/favicon.ico', type: 'image/x-icon' },
     ],
     shortcut: 'https://queenspuritytest.com/favicon.ico',
     apple: { url: 'https://queenspuritytest.com/images/purity-test.png', sizes: '180x180' },
@@ -82,7 +82,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} queens-background`}>
         <main className="min-h-screen">
           {children}
         </main>

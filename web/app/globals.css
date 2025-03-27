@@ -77,10 +77,10 @@
   }
   body {
     @apply text-foreground;
-    background-color: #faebc4;
-    background-image: url('https://ext.same-assets.com/1485607787/3322675871.png');
-    background-repeat: repeat;
-    font-family: var(--font-body);
+    background-color: rgb(250, 245, 235);
+    font-family: Times New Roman, serif;
+    line-height: 1.5;
+    color: #000;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -88,12 +88,116 @@
   }
 }
 
+/* Western University Purity Test Styling */
+.western-purity-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: rgb(250, 245, 235);
+}
+
+.western-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.western-title {
+  position: relative;
+  font-size: 2.5rem;
+  font-weight: normal;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.western-title::before,
+.western-title::after {
+  content: "";
+  height: 2px;
+  background-color: #000;
+  flex-grow: 1;
+}
+
+.western-title span {
+  color: #8b0000; /* Maroon red color */
+  font-style: italic;
+  padding-right: 0.5rem;
+}
+
+.western-title h1 {
+  padding: 0 1rem;
+  white-space: nowrap;
+}
+
+.western-description {
+  font-size: 1.1rem;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 2rem;
+}
+
+.western-caution {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.western-instruction {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.western-prompt-items {
+  counter-reset: item;
+  list-style-type: none;
+  padding: 0;
+}
+
+.western-prompt-item {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 1rem;
+  padding-left: 1rem;
+}
+
+.western-prompt-item-number {
+  min-width: 1.5rem;
+  text-align: right;
+  margin-right: 0.5rem;
+}
+
+.western-prompt-item-checkbox {
+  margin: 0 0.5rem;
+}
+
+.western-prompt-item-text {
+  flex: 1;
+}
+
+.western-submit-button {
+  background-color: #8b0000;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 2rem;
+  font-family: Times New Roman, serif;
+}
+
+.western-submit-button:hover {
+  background-color: #660000;
+}
+
 /* Rice Purity Test specific styles */
 .rice-purity-container {
   @apply max-w-4xl mx-auto p-6 sm:p-10;
-  background-color: rgba(255, 255, 255, 0.9);
-  border: 2px solid #9e9176;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 252, 245, 0.92);
+  border: 2px solid #5C3800;
+  box-shadow: 0 4px 12px rgba(92, 56, 0, 0.1);
+  z-index: 1;
 }
 
 .rice-header {
@@ -116,17 +220,27 @@
 }
 
 .prompt-item {
-  @apply py-2 border-b border-[#d4c9a8] flex items-start;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  background-color: rgba(249, 244, 234, 0.8);
 }
 
-.prompt-checkbox {
-  @apply h-4 w-4 mt-1 mr-3 border-[#9e9176] rounded;
-  cursor: pointer;
+.prompt-number {
+  display: inline-block;
+  min-width: 1.5rem;
+  text-align: right;
+  font-weight: 500;
 }
 
 .prompt-text {
-  @apply text-sm sm:text-base text-[#302616];
-  cursor: pointer;
+  flex: 1;
+}
+
+/* Make checkboxes a bit larger for better clickability */
+.prompt-item input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
 }
 
 .rice-button {
@@ -222,4 +336,131 @@
   .ad-sidebar {
     display: none;
   }
+}
+
+/* Queen's University Purity Test Styling - Matching the Image Layout */
+.queens-purity-container {
+  position: relative;
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: rgba(255, 252, 245, 0.92);
+  font-family: 'Times New Roman', Times, serif;
+  line-height: 1.5;
+  color: #000;
+  border: 2px solid #5C3800;
+  box-shadow: 0 4px 12px rgba(92, 56, 0, 0.1);
+  z-index: 1;
+}
+
+.queens-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #000;
+  padding-bottom: 1rem;
+}
+
+.queens-title {
+  font-size: 2.5rem;
+  font-weight: normal;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.queens-title span {
+  color: #B90E31; /* Queen's red */
+  font-style: italic;
+  padding-right: 0.5rem;
+}
+
+.queens-description {
+  font-size: 1.1rem;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 2rem;
+}
+
+.queens-caution {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.queens-instruction {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Question styles matching the image */
+.prompt-items {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 1rem;
+}
+
+.prompt-item {
+  display: flex;
+  margin-bottom: 0.75rem;
+  padding: 0.25rem 0;
+  background-color: rgba(250, 245, 235, 0.8);
+}
+
+.prompt-item label {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.prompt-number {
+  min-width: 2rem;
+  text-align: right;
+  margin-right: 0.5rem;
+}
+
+.prompt-item input[type="checkbox"] {
+  margin: 0.2rem 0.5rem 0;
+  transform: scale(1.1);
+}
+
+.prompt-text {
+  flex: 1;
+  padding-top: 0;
+}
+
+.queens-submit-button {
+  background-color: #B90E31; /* Queen's red */
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 2rem;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.queens-submit-button:hover {
+  background-color: #8e0b26;
+}
+
+/* Queen's University crest background pattern */
+.queens-background {
+  position: relative;
+  background-color: rgb(250, 245, 235);
+}
+
+.queens-background::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/images/queens-crest.png');
+  background-repeat: repeat;
+  background-size: 120px;
+  opacity: 0.1;
+  z-index: -1;
+  pointer-events: none;
 } 

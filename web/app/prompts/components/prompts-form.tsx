@@ -116,7 +116,7 @@ export function PromptsForm() {
   const [faculty, setFaculty] = useState<string>("");
   const [checkedPrompts, setCheckedPrompts] = useState<boolean[]>(Array(questions.length).fill(false));
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [facultyError, setFacultyError] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   // Handle checkbox changes
   const handleCheckboxChange = (index: number) => {
@@ -128,7 +128,7 @@ export function PromptsForm() {
   // Handle faculty selection
   const handleFacultyChange = (value: string) => {
     setFaculty(value);
-    setFacultyError("");
+    setError("");
   };
 
   // Clear all checkboxes
@@ -139,7 +139,7 @@ export function PromptsForm() {
   // Calculate score and submit
   const handleSubmit = async () => {
     if (!faculty) {
-      setFacultyError("Don't be shy... please select your faculty before submitting.");
+      setError("Don't be shy... please select your faculty before submitting.");
       return;
     }
 
@@ -176,83 +176,86 @@ export function PromptsForm() {
   };
 
   return (
-    <>
-      <div className="text-sm text-center mb-6 text-[#302616]">
-        <p className="mb-2">This test consists of {questions.length} statements.</p>
-      </div>
+    <div className="queens-purity-container">
 
-      {/* Prompt list with checkboxes */}
-      <div className="prompt-list">
-        <ol className="list-decimal pl-8 space-y-0.5">
-          {questions.map((question, index) => (
-            <li key={index} className="prompt-item">
-              <input
-                type="checkbox"
-                id={`prompt-${index}`}
-                className="prompt-checkbox"
-                checked={checkedPrompts[index]}
-                onChange={() => handleCheckboxChange(index)}
-              />
-              <label htmlFor={`prompt-${index}`} className="prompt-text">
-                <span className="font-medium mr-1">{index + 1}.</span> {question}
+      <p className="queens-caution">
+        Caution: This is not a bucket list. You are beyond cooked if you complete all the items on this list.
+      </p>
+
+      <p className="queens-instruction">
+        Your purity score will be calculated at the end.
+      </p>
+
+      <div className="prompt-items">
+        {questions.map((question, index) => {
+          const questionNumber = index + 1;
+          
+          return (
+            <div key={index} className="prompt-item">
+              <label>
+                <span className="prompt-number">{questionNumber}.</span>
+                <input
+                  type="checkbox"
+                  checked={checkedPrompts[index]}
+                  onChange={() => handleCheckboxChange(index)}
+                />
+                <span className="prompt-text">{question}</span>
               </label>
-            </li>
-          ))}
-        </ol>
+            </div>
+          );
+        })}
       </div>
       
-      {/* Faculty selection & buttons section */}
+      {/* Faculty selection */}
       <div className="border-t border-[#d4c9a8] pt-6 mt-8">
         <div className="mb-6">
-          <label htmlFor="faculty-select" className="block text-sm font-medium mb-2 text-[#302616]">
-            Select Your Faculty/Department
-          </label>
+          <label className="block text-center mb-2">Please select your faculty:</label>
           <Select value={faculty} onValueChange={handleFacultyChange}>
-            <SelectTrigger id="faculty-select" className={`w-full border-[#9e9176] bg-[#f8f3e6] text-[#302616] ${facultyError ? 'border-red-500' : ''}`}>
-              <SelectValue placeholder="Select a faculty..." />
+            <SelectTrigger className="w-full max-w-xs mx-auto">
+              <SelectValue placeholder="Select your faculty" />
             </SelectTrigger>
-            <SelectContent className="bg-[#f8f3e6] border-[#9e9176]">
-              <SelectItem value="asus">Arts and Science</SelectItem>
-              <SelectItem value="business">Commerce</SelectItem>
-              <SelectItem value="engineering">Engineering</SelectItem>
+            <SelectContent>
+              <SelectItem value="artsci">Arts & Science</SelectItem>
+              <SelectItem value="engineering">Engineering & Applied Science</SelectItem>
+              <SelectItem value="commerce">Commerce</SelectItem>
+              <SelectItem value="nursing">Nursing</SelectItem>
+              <SelectItem value="education">Education</SelectItem>
               <SelectItem value="other">Other</SelectItem>
             </SelectContent>
           </Select>
-          {facultyError && (
-            <p className="mt-2 text-sm text-red-600 font-medium">
-              {facultyError}
-            </p>
-          )}
-          <p className="mt-2 text-xs text-[#5d5345]">
-            All your data is anonymous and will not be shared with anyone.
-          </p>
         </div>
-        
-        <div className="flex flex-col sm:flex-row gap-4 sm:justify-between buttons">
+
+        {error && (
+          <div className="bg-red-100 text-red-800 p-3 mb-4 rounded text-center">
+            {error}
+          </div>
+        )}
+
+        <div className="flex flex-col sm:flex-row gap-4 sm:justify-between">
           <Button 
-            className="rice-button sm:order-1" 
+            className="queens-submit-button sm:order-1" 
             onClick={handleClear}
             disabled={isSubmitting}
           >
             Clear All Checkboxes
           </Button>
           <Button 
-            className="rice-button sm:order-2" 
+            className="queens-submit-button sm:order-2" 
             onClick={handleSubmit}
-            disabled={isSubmitting}
+            disabled={isSubmitting || !faculty}
           >
             {isSubmitting ? "Calculating..." : "Calculate My Score"}
           </Button>
         </div>
       </div>
       
-      <div className="text-center mt-8 text-sm text-[#5d5345]">
+      <div className="text-center mt-8 text-sm">
         <p>
-          <Link href="/" className="text-[#86412e] hover:underline">
+          <Link href="/" className="text-[#B90E31] hover:underline">
             Return to Home
           </Link>
         </p>
       </div>
-    </>
+    </div>
   );
 } 

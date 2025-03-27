@@ -20,7 +20,7 @@ export default function PromptsPage() {
                 className="mb-3"
               />
               <h1 className="rice-title">
-                <span className="thresher-font">The</span> Rice Purity Test
+                <span className="thresher-font">The</span> Queen's Purity Test
               </h1>
               <h2 className="rice-subtitle">
                 Check the boxes for acts that you have done

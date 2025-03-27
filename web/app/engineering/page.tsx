@@ -4,7 +4,7 @@ import { AdSidebar } from '@/components/ui/ads/ad-sidebar'
 
 export default function EngineeringPromptsPage() {
   return (
-    <div className="page-container">
+    <div className="page-container queens-background">
       {/* Left side ad */}
       <AdSidebar adSlot="2345678901" position="left" />
       
@@ -20,7 +20,7 @@ export default function EngineeringPromptsPage() {
                 className="mb-3"
               />
               <h1 className="rice-title">
-                <span className="thresher-font">The</span> Engineering Purity Test
+                <span className="thresher-font">The</span> Queen's Engineering Purity Test
               </h1>
               <h2 className="rice-subtitle">
                 Check the boxes for engineering acts that you have done

@@ -21,7 +21,7 @@ export default function Home() {
                 className="mb-4"
               />
               <h1 className="rice-title">
-                <span className="thresher-font">The</span> Rice Purity Test
+                <span className="thresher-font">The</span> Queen's Purity Test
               </h1>
               <h2 className="rice-subtitle">How pure are you?</h2>
             </div>
@@ -73,7 +73,7 @@ export default function Home() {
       </div>
       
       {/* Right side ad */}
-      <AdSidebar adSlot="5678901234" position="right" />
+      <AdSidebar adSlot="6789012345" position="right" />
     </div>
   )
 } 
