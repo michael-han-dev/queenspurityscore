@@ -103,14 +103,19 @@ export async function getFacultyAvgScore(faculty: string): Promise<number> {
   }
 }
 
-// Get all faculty statistics
-export async function getAllFacultyStats(): Promise<Record<string, FacultyStats>> {
+// Get all faculty statistics (updated version)
+export async function getAllFacultyStats(): Promise<Record<string, any>> {
   try {
     const statsSnapshot = await getDocs(collection(db, 'facultyStats'));
-    const allStats: Record<string, FacultyStats> = {};
+    const allStats: Record<string, any> = {};
     
     statsSnapshot.forEach(doc => {
-      allStats[doc.id] = doc.data() as FacultyStats;
+      // Convert first letter to uppercase for display
+      const facultyName = doc.id.charAt(0).toUpperCase() + doc.id.slice(1);
+      allStats[doc.id] = {
+        ...doc.data(),
+        displayName: facultyName
+      };
     });
     
     return allStats;

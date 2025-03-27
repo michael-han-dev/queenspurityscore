@@ -5,13 +5,14 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { getEngineeringAvgScore } from '@/lib/firestoreService'
+import { getEngineeringAvgScore, getAllFacultyStats } from '@/lib/firestoreService'
 import { AdSidebar } from '@/components/ui/ads/ad-sidebar'
 
 export default function EngineeringResultsPage() {
   const searchParams = useSearchParams();
   const [score, setScore] = useState<number>(0);
   const [avgScore, setAvgScore] = useState<number>(0);
+  const [allFacultyStats, setAllFacultyStats] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -27,10 +28,20 @@ export default function EngineeringResultsPage() {
         // Fetch actual average score from Firebase
         const avgScoreFromDB = await getEngineeringAvgScore();
         setAvgScore(avgScoreFromDB);
+        
+        // Fetch all faculty stats
+        const allStats = await getAllFacultyStats();
+        setAllFacultyStats(allStats);
       } catch (error) {
         console.error("Error fetching data:", error);
-        // Use fallback value if Firebase fetch fails
+        // Use fallback values if Firebase fetch fails
         setAvgScore(65);
+        setAllFacultyStats({
+          asus: { avgScore: 58, count: 12, displayName: "Arts and Science" },
+          business: { avgScore: 45, count: 8, displayName: "Commerce" },
+          engineering: { avgScore: 63, count: 15, displayName: "Engineering" },
+          other: { avgScore: 52, count: 5, displayName: "Other" }
+        });
       } finally {
         setLoading(false);
       }
@@ -92,6 +103,27 @@ export default function EngineeringResultsPage() {
                   <p className="text-sm text-[#5d5345]">
                     The average Engineering Purity Score is <span className="font-semibold">{avgScore}</span>
                   </p>
+                </div>
+                
+                {/* Faculty Stats Comparison */}
+                <div className="bg-[#f8f3e6] border border-[#d4c9a8] p-4 rounded-md mb-6">
+                  <h3 className="text-lg font-medium text-[#86412e] mb-2">General Faculty Averages</h3>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    {Object.keys(allFacultyStats).map(key => (
+                      <div 
+                        key={key} 
+                        className={`p-3 border rounded-md ${key === 'engineering' ? 'border-[#86412e] bg-[#f0e9d6]' : 'border-[#d4c9a8]'}`}
+                      >
+                        <p className="font-medium text-[#302616]">
+                          {allFacultyStats[key].displayName}
+                        </p>
+                        <p className="text-sm text-[#5d5345]">
+                          Average: <span className="font-semibold">{allFacultyStats[key].avgScore}</span>
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
               

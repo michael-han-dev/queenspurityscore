@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { getFacultyAvgScore } from '@/lib/firestoreService'
+import { getFacultyAvgScore, getAllFacultyStats } from '@/lib/firestoreService'
 import { AdInArticle } from '@/components/ui/ads/ad-in-article'
 import { AdBanner } from '@/components/ui/ads/ad-banner'
 import { AdSidebar } from '@/components/ui/ads/ad-sidebar'
@@ -15,6 +15,7 @@ export default function ResultsPage() {
   const [score, setScore] = useState<number>(0);
   const [faculty, setFaculty] = useState<string>("");
   const [avgScore, setAvgScore] = useState<number>(0);
+  const [allFacultyStats, setAllFacultyStats] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -35,11 +36,16 @@ export default function ResultsPage() {
           // Fetch actual average score from Firebase
           const avgScoreFromDB = await getFacultyAvgScore(facultyParam.toLowerCase());
           setAvgScore(avgScoreFromDB);
+          
+          // Fetch all faculty stats
+          const allStats = await getAllFacultyStats();
+          setAllFacultyStats(allStats);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
         // Use fallback values if Firebase fetch fails
         setAvgScore(getDefaultAvgScore(faculty.toLowerCase()));
+        setAllFacultyStats(getDefaultFacultyStats());
       } finally {
         setLoading(false);
       }
@@ -51,26 +57,32 @@ export default function ResultsPage() {
   // Fallback function for average scores if Firebase fails
   const getDefaultAvgScore = (faculty: string): number => {
     const mockAvgScores: Record<string, number> = {
-      arts: 58,
+      asus: 58,
       business: 45,
       engineering: 63,
-      medicine: 72,
-      science: 67,
       other: 52
     };
     
     return mockAvgScores[faculty] || 60;
   };
   
-  // Function to get message based on score
-  const getScoreMessage = (score: number) => {
-    if (score >= 95) return "Nearly saint-like! Your innocence is admirable.";
-    if (score >= 85) return "Very pure. You've maintained your innocence well.";
-    if (score >= 70) return "Somewhat pure. You've had some experiences while keeping it mostly clean.";
-    if (score >= 50) return "Middle of the road. You've lived a balanced life of experiences.";
-    if (score >= 30) return "You've experienced quite a bit in your time.";
-    if (score >= 15) return "Quite experienced. You've explored many aspects of life.";
-    return "You've explored the vast majority of life's experiences.";
+  // Fallback function for all faculty stats if Firebase fails
+  const getDefaultFacultyStats = (): Record<string, any> => {
+    return {
+      asus: { avgScore: 58, count: 12, displayName: "Arts and Science" },
+      business: { avgScore: 45, count: 8, displayName: "Commerce" },
+      engineering: { avgScore: 63, count: 15, displayName: "Engineering" },
+      other: { avgScore: 52, count: 5, displayName: "Other" }
+    };
+  };
+  
+  // Get message based on score
+  const getScoreMessage = (score: number): string => {
+    if (score >= 90) return "Wow, you're practically an angel! Pure as the driven snow.";
+    if (score >= 70) return "You're pretty innocent, but you've had some fun.";
+    if (score >= 50) return "You're right in the middle - a good balance of innocence and experience.";
+    if (score >= 30) return "You've lived quite an adventurous life!";
+    return "You've really experienced everything life has to offer, haven't you?";
   };
 
   if (loading) {
@@ -135,6 +147,27 @@ export default function ResultsPage() {
             <div className="text-sm text-[#302616] mb-6">
               <p>Faculty: <span className="font-medium">{faculty}</span></p>
               <p>Average score for {faculty}: <span className="font-medium">{avgScore}</span></p>
+            </div>
+            
+            {/* Faculty Stats Comparison */}
+            <div className="bg-[#f8f3e6] border border-[#d4c9a8] p-4 rounded-md mb-6">
+              <h3 className="text-lg font-medium text-[#86412e] mb-2">Faculty Comparison</h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                {Object.keys(allFacultyStats).map(key => (
+                  <div 
+                    key={key} 
+                    className={`p-3 border rounded-md ${key === faculty.toLowerCase() ? 'border-[#86412e] bg-[#f0e9d6]' : 'border-[#d4c9a8]'}`}
+                  >
+                    <p className="font-medium text-[#302616]">
+                      {allFacultyStats[key].displayName}
+                    </p>
+                    <p className="text-sm text-[#5d5345]">
+                      Average: <span className="font-semibold">{allFacultyStats[key].avgScore}</span>
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
             
             <AdInArticle adSlot="9012345678" />
