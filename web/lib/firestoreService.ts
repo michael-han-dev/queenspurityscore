@@ -25,6 +25,19 @@ interface FacultyStats {
   avgScore: number;
 }
 
+// Interface for engineering score
+interface EngineeringScore {
+  score: number;
+  timestamp: any;
+}
+
+// Interface for engineering statistics
+interface EngineeringStats {
+  totalScore: number;
+  count: number;
+  avgScore: number;
+}
+
 // Save a new score and update faculty statistics
 export async function saveScore({ score, faculty }: ScoreSubmission): Promise<string> {
   try {
@@ -122,6 +135,70 @@ export async function getGlobalAvgScore(): Promise<number> {
     return totalCount > 0 ? Math.round(totalScore / totalCount) : 0;
   } catch (error) {
     console.error('Error calculating global average score:', error);
+    throw error;
+  }
+}
+
+// Save a new engineering score and update statistics
+export async function saveEngineeringScore(score: number): Promise<string> {
+  try {
+    // 1. Save individual score
+    const scoreRef = await addDoc(collection(db, 'engineeringScores'), {
+      score,
+      timestamp: serverTimestamp()
+    });
+
+    // 2. Update engineering statistics
+    await updateEngineeringStats(score);
+    
+    return scoreRef.id;
+  } catch (error) {
+    console.error('Error saving engineering score:', error);
+    throw error;
+  }
+}
+
+// Update engineering statistics when a new score is added
+async function updateEngineeringStats(newScore: number): Promise<void> {
+  const statsRef = doc(db, 'engineeringStats', 'overall');
+  const statsDoc = await getDoc(statsRef);
+  
+  if (statsDoc.exists()) {
+    // Update existing stats
+    const stats = statsDoc.data() as EngineeringStats;
+    const newTotalScore = stats.totalScore + newScore;
+    const newCount = stats.count + 1;
+    const newAvgScore = Math.round(newTotalScore / newCount);
+    
+    await updateDoc(statsRef, {
+      totalScore: newTotalScore,
+      count: newCount,
+      avgScore: newAvgScore
+    });
+  } else {
+    // Create new stats document
+    await setDoc(statsRef, {
+      totalScore: newScore,
+      count: 1,
+      avgScore: newScore
+    });
+  }
+}
+
+// Get average score for engineering
+export async function getEngineeringAvgScore(): Promise<number> {
+  try {
+    const statsRef = doc(db, 'engineeringStats', 'overall');
+    const statsDoc = await getDoc(statsRef);
+    
+    if (statsDoc.exists()) {
+      const stats = statsDoc.data() as EngineeringStats;
+      return stats.avgScore;
+    }
+    
+    return 0; // Default if no scores exist
+  } catch (error) {
+    console.error('Error getting engineering average score:', error);
     throw error;
   }
 } 
