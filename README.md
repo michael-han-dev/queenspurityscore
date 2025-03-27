@@ -7,7 +7,7 @@ A modern, clean implementation of the Rice Purity Test with enhanced features li
 This is a monorepo containing:
 
 - `web/` - Next.js frontend application
-- `api/` - Flask backend service
+- `api/` - Flask backend service - in the works...
 
 ## Requirements
 
