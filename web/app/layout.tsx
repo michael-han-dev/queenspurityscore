@@ -14,11 +14,12 @@ export const metadata: Metadata = {
   // Favicon and app icons
   icons: {
     icon: [
-      { url: 'https://queenspuritytest.com/favicon.ico', sizes: 'any' },
-      { url: 'https://queenspuritytest.com/favicon.ico', type: 'image/x-icon' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
+      { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
     ],
-    shortcut: 'https://queenspuritytest.com/favicon.ico',
-    apple: { url: 'https://queenspuritytest.com/images/purity-test.png', sizes: '180x180' },
+    shortcut: '/favicon.ico',
+    apple: { url: '/purity-test.png', sizes: '180x180' },
   },
   
   // Open Graph metadata
