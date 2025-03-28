@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { PromptsForm } from './components/prompts-form'
 import { AdSidebar } from '@/components/ui/ads/ad-sidebar'
 
@@ -9,7 +10,20 @@ export default function PromptsPage() {
       <AdSidebar adSlot="7890123456" position="left" />
       
       <div className="container mx-auto px-4 py-8">
-        <div className="rice-purity-container">
+        <div className="rice-purity-container relative">
+          {/* Home Button inside the container */}
+          <div className="absolute top-4 left-4 z-10">
+            <Link 
+              href="/" 
+              className="flex items-center gap-1 bg-[#f8f3e6] border border-[#9e9176] px-3 py-2 rounded-md hover:bg-[#f0e9d6] transition-colors text-[#86412e]"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              <span className="text-sm">Home</span>
+            </Link>
+          </div>
+          
           <header className="rice-header">
             <div className="title flex flex-col items-center">
               <Image 

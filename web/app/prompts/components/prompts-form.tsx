@@ -137,7 +137,7 @@ function SuggestionForm() {
 
   return (
     <div className="mt-8 p-4 border border-[#d4c9a8] rounded-md bg-[#f8f3e6]">
-      <h3 className="text-lg font-medium mb-2 text-center">Suggest a New Prompt</h3>
+      <h3 className="text-lg font-medium mb-2 text-center">Suggest new prompts and prompts to remove</h3>
       <form onSubmit={handleSubmit} className="space-y-2">
         <input
           type="text"

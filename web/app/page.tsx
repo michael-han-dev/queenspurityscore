@@ -31,9 +31,6 @@ export default function Home() {
             <p className="mb-4 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
               The Rice Purity Test is a self-graded survey that assesses the participant&apos;s level of innocence.
             </p>
-            <p className="text-sm sm:text-base font-semibold">
-              Check each box for which you have done the act described.
-            </p>
           </div>
 
           <div className="test-options grid grid-cols-1 md:grid-cols-3 gap-4 mx-auto max-w-4xl">
@@ -66,6 +63,15 @@ export default function Home() {
               <p className="text-sm text-[#5d5345]">
                 Health Sciences Specific Test
               </p>
+            </Link>
+          </div>
+          
+          <div className="mt-12 text-center text-sm">
+            <Link href="/updates" className="text-[#86412e] hover:underline flex items-center justify-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
+              </svg>
+              <span>View Site Updates</span>
             </Link>
           </div>
           
