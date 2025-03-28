@@ -216,10 +216,8 @@ export function PromptsForm() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="artsci">Arts & Science</SelectItem>
-              <SelectItem value="engineering">Engineering & Applied Science</SelectItem>
+              <SelectItem value="engineering">Engineering</SelectItem>
               <SelectItem value="commerce">Commerce</SelectItem>
-              <SelectItem value="nursing">Nursing</SelectItem>
-              <SelectItem value="education">Education</SelectItem>
               <SelectItem value="other">Other</SelectItem>
             </SelectContent>
           </Select>

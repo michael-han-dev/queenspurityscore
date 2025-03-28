@@ -1,68 +1,71 @@
 "use client"
 
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { getEngineeringAvgScore, getAllFacultyStats } from '@/lib/firestoreService'
 import { AdSidebar } from '@/components/ui/ads/ad-sidebar'
+import { getEngineeringAvgScore } from '@/lib/firestoreService'
+
+interface EngineeringStats {
+  averageScore: number;
+  responseCount: number;
+}
 
 export default function EngineeringResultsPage() {
   const searchParams = useSearchParams();
-  const [score, setScore] = useState<number>(0);
-  const [avgScore, setAvgScore] = useState<number>(0);
-  const [allFacultyStats, setAllFacultyStats] = useState<Record<string, any>>({});
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
+  const [engineeringStats, setEngineeringStats] = useState<EngineeringStats | null>(null);
+  const [error, setError] = useState('');
+  
+  // Get the score from URL parameters
+  const score = searchParams.get('score') ? parseInt(searchParams.get('score') as string) : null;
+  const totalQuestions = searchParams.get('total') ? parseInt(searchParams.get('total') as string) : 100;
 
   useEffect(() => {
-    const fetchData = async () => {
+    async function fetchStats() {
       try {
-        // Get score parameter from URL
-        const scoreParam = searchParams.get('score');
-        
-        if (scoreParam) {
-          setScore(parseInt(scoreParam, 10));
-        }
-        
-        // Fetch actual average score from Firebase
-        const avgScoreFromDB = await getEngineeringAvgScore();
-        setAvgScore(avgScoreFromDB);
-        
-        // Fetch all faculty stats
-        const allStats = await getAllFacultyStats();
-        setAllFacultyStats(allStats);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        // Use fallback values if Firebase fetch fails
-        setAvgScore(65);
-        setAllFacultyStats({
-          asus: { avgScore: 58, count: 12, displayName: "Arts and Science" },
-          business: { avgScore: 45, count: 8, displayName: "Commerce" },
-          engineering: { avgScore: 63, count: 15, displayName: "Engineering" },
-          other: { avgScore: 52, count: 5, displayName: "Other" }
+        // Only fetch engineering stats - no other faculties needed
+        const avgScore = await getEngineeringAvgScore();
+        setEngineeringStats({
+          averageScore: avgScore,
+          responseCount: 0,
         });
+      } catch (err) {
+        console.error('Error fetching stats:', err);
+        setError('Failed to load statistics. Please try again later.');
       } finally {
         setLoading(false);
       }
-    };
-    
-    fetchData();
-  }, [searchParams]);
+    }
 
-  // Get message based on score
-  const getMessage = (score: number) => {
-    if (score >= 90) return "Wow, you're practically a mechanical pencil! Almost untouched by engineering culture.";
-    if (score >= 70) return "You're like a slightly used textbook - mostly clean with a few highlighted pages.";
-    if (score >= 50) return "You're a proper engineer with a healthy balance of theory and practical experience.";
-    if (score >= 30) return "Your keyboard has many worn-out keys. You've seen the depths of engineering culture.";
-    return "You are the engineering equivalent of a battle-hardened server that hasn't been rebooted in years!";
+    fetchStats();
+  }, []);
+
+  // Function to get interpretation message based on score
+  const getScoreInterpretation = (score: number): string => {
+    if (score >= 90) return "Wow, you're practically a freshman!";
+    if (score >= 70) return "Still quite innocent for an engineering student.";
+    if (score >= 50) return "Right in the middle - a balanced engineering experience.";
+    if (score >= 30) return "You've definitely embraced the engineering culture.";
+    return "You're a true engineering veteran!";
+  };
+
+  // Calculate percentage and comparison message
+  const calculateComparison = (): string => {
+    if (!score || !engineeringStats?.averageScore) return "";
+    
+    const diff = score - engineeringStats.averageScore;
+    if (Math.abs(diff) < 5) return "Your score is about average for engineering students.";
+    if (diff > 0) return `You scored ${diff.toFixed(1)} points higher than the average engineering student.`;
+    return `You scored ${Math.abs(diff).toFixed(1)} points lower than the average engineering student.`;
   };
 
   return (
     <div className="page-container">
       {/* Left side ad */}
-      <AdSidebar adSlot="7890123456" position="left" />
+      <AdSidebar adSlot="5678901234" position="left" />
       
       <div className="container mx-auto px-4 py-8">
         <div className="rice-purity-container">
@@ -85,47 +88,46 @@ export default function EngineeringResultsPage() {
             <div className="text-center py-10">
               <p className="text-[#302616]">Calculating your engineering prowess...</p>
             </div>
-          ) : (
+          ) : 
+          (
             <>
-              <div className="text-center mb-8">
-                <div className="score-circle mb-6">
-                  <div>
-                    <span className="block text-4xl sm:text-6xl font-bold text-[#302616]">{score}</span>
-                    <span className="text-sm text-[#5d5345]">out of 100</span>
+              {score !== null ? (
+                <div className="score-display flex flex-col items-center mt-8">
+                  <div className="score-circle bg-[#f0e9d6] border-4 border-[#9e9176] rounded-full w-40 h-40 flex items-center justify-center mb-6">
+                    <span className="text-4xl font-bold text-[#86412e]">{score}</span>
                   </div>
-                </div>
-                
-                <p className="text-lg text-[#302616] mb-4 italic">
-                  {getMessage(score)}
-                </p>
-                
-                <div className="bg-[#f8f3e6] border border-[#d4c9a8] p-4 rounded-md mb-6">
-                  <p className="text-sm text-[#5d5345]">
-                    The average Engineering Purity Score is <span className="font-semibold">{avgScore}</span>
-                  </p>
-                </div>
-                
-                {/* Faculty Stats Comparison */}
-                <div className="bg-[#f8f3e6] border border-[#d4c9a8] p-4 rounded-md mb-6">
-                  <h3 className="text-lg font-medium text-[#86412e] mb-2">General Faculty Averages</h3>
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                    {Object.keys(allFacultyStats).map(key => (
-                      <div 
-                        key={key} 
-                        className={`p-3 border rounded-md ${key === 'engineering' ? 'border-[#86412e] bg-[#f0e9d6]' : 'border-[#d4c9a8]'}`}
-                      >
-                        <p className="font-medium text-[#302616]">
-                          {allFacultyStats[key].displayName}
+                  <p className="text-xl text-center mb-4">
+                    {getScoreInterpretation(score)}
+                  </p>
+                  
+                  <div className="stats bg-[#f8f3e6] border border-[#d4c9a8] p-4 rounded-md w-full max-w-md mb-8">
+                    <h3 className="text-center text-lg font-medium mb-2">Engineering Statistics</h3>
+                    
+                    {engineeringStats ? (
+                      <>
+                        <div className="stat-row flex justify-between py-1 border-b border-[#e5dcc3]">
+                          <span>Average Score:</span>
+                          <span className="font-medium">{engineeringStats.averageScore.toFixed(1)}</span>
+                        </div>
+                        
+                        <p className="text-center mt-4 text-sm italic">
+                          {calculateComparison()}
                         </p>
-                        <p className="text-sm text-[#5d5345]">
-                          Average: <span className="font-semibold">{allFacultyStats[key].avgScore}</span>
-                        </p>
-                      </div>
-                    ))}
+                      </>
+                    ) : (
+                      <p className="text-center text-sm italic">Stats temporarily unavailable</p>
+                    )}
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="error-message text-center py-10">
+                  <p className="text-red-600">No score was provided. Please take the test first.</p>
+                  <Link href="/engineering" className="block mt-4 text-[#86412e] hover:underline">
+                    Take Engineering Purity Test
+                  </Link>
+                </div>
+              )}
               
               <div className="text-center space-y-4">
                 <Link href="/engineering">
