@@ -44,19 +44,29 @@ export default function Home() {
             
             <Link href="/engineering" className="test-option bg-[#f8f3e6] border-2 border-[#9e9176] p-4 rounded-md text-center hover:bg-[#f0e9d6] transition-colors">
               <h3 className="font-medium text-lg text-[#86412e] mb-2">Engineering Test</h3>
-              <p className="text-sm text-[#5d5345]">Specific test for engineering students</p>
+              <p className="text-sm text-[#5d5345]">Engineering Specific Test</p>
             </Link>
             
-            <div className="test-option bg-[#f8f3e6] border-2 border-[#9e9176] p-4 rounded-md text-center opacity-75">
+            <Link href="/commerce" className="test-option bg-[#f8f3e6] border-2 border-[#9e9176] p-4 rounded-md text-center hover:bg-[#f0e9d6] transition-colors">
               <h3 className="font-medium text-lg text-[#86412e] mb-2">Commerce Test</h3>
               <p className="text-sm text-[#5d5345]">
                 Commerce Specific Test
-                <br />
-                <span className="bg-[#9e9176] text-white text-xs px-2 py-1 rounded-full inline-block mt-1">
-                  Coming Soon
-                </span>
               </p>
-            </div>
+            </Link>
+            
+            <Link href="/nursing" className="test-option bg-[#f8f3e6] border-2 border-[#9e9176] p-4 rounded-md text-center hover:bg-[#f0e9d6] transition-colors">
+              <h3 className="font-medium text-lg text-[#86412e] mb-2">Nursing Test</h3>
+              <p className="text-sm text-[#5d5345]">
+                Nursing Specific Test
+              </p>
+            </Link>
+            
+            <Link href="/health" className="test-option bg-[#f8f3e6] border-2 border-[#9e9176] p-4 rounded-md text-center hover:bg-[#f0e9d6] transition-colors">
+              <h3 className="font-medium text-lg text-[#86412e] mb-2">Health Sciences Test</h3>
+              <p className="text-sm text-[#5d5345]">
+                Health Sciences Specific Test
+              </p>
+            </Link>
           </div>
           
           <div className="text-center text-sm text-gray-700 mt-8" id="ThresherBottomText">

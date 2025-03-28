@@ -206,4 +206,55 @@ export async function getEngineeringAvgScore(): Promise<number> {
     console.error('Error getting engineering average score:', error);
     throw error;
   }
+}
+
+export async function saveSuggestion(suggestion: string, type: 'regular' | 'engineering'): Promise<string> {
+  try {
+    const collectionName = type === 'regular' ? 'promptSuggestions' : 'engineeringSuggestions';
+    
+    // Save the suggestion to Firestore
+    const suggestionRef = await addDoc(collection(db, collectionName), {
+      suggestion,
+      timestamp: serverTimestamp(),
+      status: 'pending'
+    });
+    
+    console.log(`${type} suggestion saved with ID: ${suggestionRef.id}`);
+    return suggestionRef.id;
+  } catch (error) {
+    console.error(`Error saving ${type} suggestion:`, error);
+    throw error;
+  }
+}
+
+// Add a new function to save suggestions for any faculty type
+export async function saveFacultySuggestion(
+  suggestion: string, 
+  faculty: 'commerce' | 'nursing' | 'health' | 'regular' | 'engineering'
+): Promise<string> {
+  try {
+    // Map faculty to collection name
+    const collectionMap = {
+      regular: 'promptSuggestions',
+      engineering: 'engineeringSuggestions',
+      commerce: 'commerceSuggestions',
+      nursing: 'nursingSuggestions',
+      health: 'healthScienceSuggestions'
+    };
+    
+    const collectionName = collectionMap[faculty];
+    
+    // Save the suggestion to Firestore
+    const suggestionRef = await addDoc(collection(db, collectionName), {
+      suggestion,
+      timestamp: serverTimestamp(),
+      status: 'pending'
+    });
+    
+    console.log(`${faculty} suggestion saved with ID: ${suggestionRef.id}`);
+    return suggestionRef.id;
+  } catch (error) {
+    console.error(`Error saving ${faculty} suggestion:`, error);
+    throw error;
+  }
 } 

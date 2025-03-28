@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Link from 'next/link'
-import { saveScore } from '@/lib/firestoreService'
+import { saveScore, saveSuggestion } from '@/lib/firestoreService'
 
 // Full list of Rice Purity Test questions
 const questions = [
@@ -13,15 +13,15 @@ const questions = [
   "Failed a class",
   "Got a point from the dons in first year",
   "Skipped every lecture besides the first one in a semester for a class",
-  "Pulled the fire alarm in residence",
-  "Pulled 3 fire alarms",
-  "Got fined during St. Patty’s or HOCO",
-  "Gone to 2+ other school’s HOCO",
+  "Pulled the fire alarm",
+  "Grabbed a free item from the sidewalk sale",
+  "Got fined during St. Patty's or HOCO",
+  "Know what the Queen's mascot looks like",
   "Blacked out at the club",
-  "Blacked out at the pre-game",
+  "Heckled a frosh during opening weekend",
   "Snuck alcohol into the dorms",
   "Played a drinking game",
-  "Got drunk at a Queen’s event (e.g., football game)",
+  "Got drunk at a Queen's event (e.g., football game)",
   "Done a keg stand",
   "Got active in any library",
   "Got active in a dorm room",
@@ -33,8 +33,8 @@ const questions = [
   "Got active with an upper year as a frosh",
   "Fling with a professor or TA",
   "Got active with multiple people in one night",
-  "Kissed someone at a Queen’s street party",
-  "Done a walk of shame across Queen’s campus",
+  "Kissed someone at a Queen's street party",
+  "Done a walk of shame across Queen's campus",
   "Streaked on campus",
   "Went home with someone you met at a party or club",
   "Befriended an exchange student",
@@ -45,7 +45,7 @@ const questions = [
   "Failed an exam",
   "Showed up hungover to class",
   "Got active with someone from 3 or more different faculties",
-  "Drunkenly ate a Bubba’s poutine at 3 a.m",
+  "Drunkenly ate a Bubba's poutine at 3 a.m",
   "Stolen 3 different dining hall items",
   "Dropped a dish in the dining hall",
   "Stolen a big item from residence",
@@ -67,8 +67,8 @@ const questions = [
   "Spent a night in COR",
   "Jumped in the pier",
   "Done a polar ice dip in the pier",
-  "Been with a guy shorter than 5’6, or a girl taller than 6’0",
-  "Pissed outside another person’s house",
+  "Been with a guy shorter than 5'6, or a girl taller than 6'0",
+  "Pissed outside another person's house",
   "Lived north of Princess Street (NOPS)",
   "Gotten a botched haircut in Kingston",
   "Got active in Vic",
@@ -78,14 +78,14 @@ const questions = [
   "Kept an unused condom in your wallet for more than 1 month",
   "Broke something in res (wall/door/etc)",
   "Waited in line for longer than 1 hour at any bar/club",
-  "Been to Queen’s for Canada Day weekend",
+  "Been to Queen's for Canada Day weekend",
   "Transferred programs",
   "Been to Sakura or Mandarin 2+ times",
   "Bought contraceptives from the pharmacy on campus",
   "Spent more than $250 on Uber Eats in a semester",
   "Spent more than $500 on booze in a semester",
   "Spent $400+ at Costco in one trip",
-  "Stolen someone’s jacket from a bar/club",
+  "Stolen someone's jacket from a bar/club",
   "Been drunk 3 nights in a row",
   "Been clubbing more than 15 times in 1 semester",
   "Gotten food poisoning from a dining hall or on-campus location",
@@ -97,11 +97,11 @@ const questions = [
   "Done a bar crawl",
   "Took a shower in residence without flip flops",
   "Posted on r/queensuniversity",
-  "Chose Queen’s as a backup option",
+  "Chose Queen's as a backup option",
   "Used a dating app",
   "Spent your summer in Kingston",
   "Cheated/Been cheated on",
-  "Witnessed or participated in the ginger run on St. Pat’s",
+  "Witnessed or participated in the ginger run on St. Pat's",
   "Had an academic consideration denied",
   "Been on a date in Kingston",
   "Attended the class of another major",
@@ -111,6 +111,60 @@ const questions = [
   "Body count 5 or more"
 ];
 
+function SuggestionForm() {
+  const [suggestion, setSuggestion] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!suggestion.trim()) return;
+
+    setIsSubmitting(true);
+    try {
+      await saveSuggestion(suggestion, 'regular');
+      setMessage('Thanks for your suggestion!');
+      setSuggestion('');
+      // Clear message after 3 seconds
+      setTimeout(() => setMessage(''), 3000);
+    } catch (error) {
+      console.error('Error submitting suggestion:', error);
+      setMessage('Failed to submit suggestion. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="mt-8 p-4 border border-[#d4c9a8] rounded-md bg-[#f8f3e6]">
+      <h3 className="text-lg font-medium mb-2 text-center">Suggest a New Prompt</h3>
+      <form onSubmit={handleSubmit} className="space-y-2">
+        <input
+          type="text"
+          value={suggestion}
+          onChange={(e) => setSuggestion(e.target.value)}
+          placeholder="Enter your prompt suggestion..."
+          className="w-full p-2 border border-[#d4c9a8] rounded"
+          disabled={isSubmitting}
+        />
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            disabled={isSubmitting || !suggestion.trim()}
+            className="bg-[#86412e] text-white px-4 py-2 rounded hover:bg-[#6a3425] disabled:opacity-50"
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit Suggestion'}
+          </button>
+        </div>
+        {message && (
+          <p className={`text-center text-sm ${message.includes('Failed') ? 'text-red-600' : 'text-green-600'}`}>
+            {message}
+          </p>
+        )}
+      </form>
+    </div>
+  );
+}
 
 export function PromptsForm() {
   const router = useRouter();
@@ -195,11 +249,11 @@ export function PromptsForm() {
             <div key={index} className="prompt-item">
               <label>
                 <span className="prompt-number">{questionNumber}.</span>
-                <input
-                  type="checkbox"
-                  checked={checkedPrompts[index]}
-                  onChange={() => handleCheckboxChange(index)}
-                />
+              <input
+                type="checkbox"
+                checked={checkedPrompts[index]}
+                onChange={() => handleCheckboxChange(index)}
+              />
                 <span className="prompt-text">{question}</span>
               </label>
             </div>
@@ -223,7 +277,7 @@ export function PromptsForm() {
             </SelectContent>
           </Select>
         </div>
-
+        
         {error && (
           <div className="bg-red-100 text-red-800 p-3 mb-4 rounded text-center">
             {error}
@@ -255,6 +309,8 @@ export function PromptsForm() {
           </Link>
         </p>
       </div>
+
+      <SuggestionForm />
     </div>
   );
 } 

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { saveEngineeringScore } from '@/lib/firestoreService'
+import { saveEngineeringScore, saveFacultySuggestion } from '@/lib/firestoreService'
 
 // List of Engineering Purity Test questions
 const engineeringQuestions = [
@@ -26,7 +26,7 @@ const engineeringQuestions = [
   "Participated in the tunnels lecture",
   "Have 500+ linkedin connections",
   "Participated or went to (Up)dating",
-  "Dating or got active with another Queen’s engineer",
+  "Dating or got active with another Queen's engineer",
   "Played in any Eng-related hockey/basketball game",
   "Been on 3+ engineering-related clubs",
   "Purpled yourself as a frosh",
@@ -58,33 +58,33 @@ const engineeringQuestions = [
   "Used Linux before",
   "Use macOS",
   "Forgot a calculator for an exam",
-  "Competed in the Queen’s Engineering Competition",
-  "Got top 3 in the Queen’s Engineering Competition",
+  "Competed in the Queen's Engineering Competition",
+  "Got top 3 in the Queen's Engineering Competition",
   "Written the EDII section for an engineering report",
   "Booked an ILC room and never went more than 3 times",
-  "Ordered from the tea room more than 15 times in a semester",
+  "Ordered from the tea room more than 10 times",
   "Have used MATLAB",
   "Got an injury building something for a design team or school",
   "Had to redo a lab because of your data",
   "Write your notes using pen and paper still",
   "Slept through or missed a final/midterm",
-  "Don’t have an Eng jacket",
+  "Live with at least 2 other engineers",
   "Pay for an AI tool",
   "Been to stauffer at 8am to study",
   "Wrote an assignment or your notes in LaTeX",
   "Cried over an assignment/test/final",
   "Went out/partied before the night of any test/midterm/final worth more than 15% of your grade",
   "Going into a career related to your discipline after graduation",
-  "Refer to Queen’s Engineering as Smith Engineering",
-  "Demo didn’t work during a presentation",
+  "Refer to Queen's Engineering as Smith Engineering",
+  "Demo didn't work during a presentation",
   "Finished a midterm or final in under half the given time",
   "Had more than 2 overdue assignments at one point",
   "Deferred a required class",
-  "Never attended a professor’s office hours during a semester",
+  "Never attended a professor's office hours during a semester",
   "Done a case competition",
   "Saw one of your TAs in a party setting",
   "Been a TA",
-  "Hooked up with someone in the same discipline",
+  "Got active, wheeled, or kissed someone in the same discipline",
   "Done a hackathon",
   "Done the engineering dance outside of school/ritual setting or for fun",
   "Negotiated a grade change with a professor/TA",
@@ -102,7 +102,7 @@ const engineeringQuestions = [
   "Broke your laptop",
   "Actively engage with more than 3 members of your frosh group still",
   "Faked an academic consideration",
-  "Remember every professor you’ve ever had",
+  "Remember every professor you've ever had",
   "Spent money on a physical textbook after 1st year",
   "Remember your APSC 101 group members",
   "Skipped an entire week of school for vacation",
@@ -110,6 +110,60 @@ const engineeringQuestions = [
   "Submitted a meme to your year Instagram meme page"
 ];
 
+function EngineeringSuggestionForm() {
+  const [suggestion, setSuggestion] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!suggestion.trim()) return;
+
+    setIsSubmitting(true);
+    try {
+      await saveFacultySuggestion(suggestion, 'engineering');
+      setMessage('Thanks for your suggestion!');
+      setSuggestion('');
+      // Clear message after 3 seconds
+      setTimeout(() => setMessage(''), 3000);
+    } catch (error) {
+      console.error('Error submitting suggestion:', error);
+      setMessage('Failed to submit suggestion. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="mt-8 p-4 border border-[#d4c9a8] rounded-md bg-[#f8f3e6]">
+      <h3 className="text-lg font-medium mb-2 text-center">Suggest a New Engineering Prompt</h3>
+      <form onSubmit={handleSubmit} className="space-y-2">
+        <input
+          type="text"
+          value={suggestion}
+          onChange={(e) => setSuggestion(e.target.value)}
+          placeholder="Enter your engineering prompt suggestion..."
+          className="w-full p-2 border border-[#d4c9a8] rounded"
+          disabled={isSubmitting}
+        />
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            disabled={isSubmitting || !suggestion.trim()}
+            className="bg-[#86412e] text-white px-4 py-2 rounded hover:bg-[#6a3425] disabled:opacity-50"
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit Suggestion'}
+          </button>
+        </div>
+        {message && (
+          <p className={`text-center text-sm ${message.includes('Failed') ? 'text-red-600' : 'text-green-600'}`}>
+            {message}
+          </p>
+        )}
+      </form>
+    </div>
+  );
+}
 
 export function EngineeringPromptsForm() {
   const router = useRouter();
@@ -169,7 +223,7 @@ export function EngineeringPromptsForm() {
 
 
       <p className="queens-caution">
-        Caution: This is not a bucket list. You are beyond cooked if you complete all the items on this list.
+        Caution: This is not a bucket list. You are a true engineering student if you complete all the items on this list.
       </p>
 
       <p className="queens-instruction">
@@ -222,6 +276,8 @@ export function EngineeringPromptsForm() {
           </Link>
         </p>
       </div>
+
+      <EngineeringSuggestionForm />
     </div>
   );
 } 
