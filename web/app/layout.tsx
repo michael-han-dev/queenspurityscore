@@ -66,6 +66,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* Add traditional favicon link as fallback */}
+        <link rel="icon" href="/favicon.ico" />
         <link rel="shortcut icon" href="/favicon.ico" />
         
         <meta name="google-adsense-account" content="ca-pub-5330176235227654" />
