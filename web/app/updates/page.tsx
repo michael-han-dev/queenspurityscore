@@ -44,6 +44,20 @@ export default function UpdatesPage() {
                 </p>
               </div>
             </div>
+            <div className="update-entry">
+              <h2 className="text-xl font-medium text-[#86412e] border-b border-[#d4c9a8] pb-2 mb-4">Mar 29, 2025</h2>
+              <div className="space-y-4 text-[#5d5345]">
+                <p>
+                  <strong>Site Update:</strong> Commerce Purity Test added.
+                </p>
+                <p>
+                  <strong>Stats:</strong> 1600 unique visitors and 7000 page views.
+                </p>
+                <p>
+                  <strong>Bug Fixes:</strong> Typos and misc stuff.
+                </p>
+              </div>
+            </div>
 
 
             {/* Template for future updates */}

@@ -1,7 +1,8 @@
 import Image from 'next/image'
+import Link from 'next/link'
+import { CommercePromptsForm } from './components/commerce-prompts-form'
 import { CommerceSuggestionForm } from './components/commerce-suggestion-form'
 import { AdSidebar } from '@/components/ui/ads/ad-sidebar'
-import Link from 'next/link'
 
 export default function CommercePage() {
   return (
@@ -34,36 +35,21 @@ export default function CommercePage() {
                 className="mb-3"
               />
               <h1 className="rice-title">
-                <span className="thresher-font">The</span> Queen's Commerce Purity Test
+                <span className="thresher-font">The</span> Qcomm Purity Test
               </h1>
               <h2 className="rice-subtitle">
-                Commerce test coming soon!
+                Check the boxes for commerce acts that you have done
               </h2>
             </div>
           </header>
 
-          <div className="mt-8 text-center">
-            <div className="bg-[#f0e9d6] border-2 border-[#9e9176] p-6 rounded-md inline-block">
-              <h3 className="text-xl font-medium mb-4 text-[#86412e]">Coming Soon!</h3>
-              <p className="mb-6">
-                We're working on creating a Commerce-specific purity test. 
-                Help us by suggesting questions that should be on the test!
-              </p>
-              
-              <CommerceSuggestionForm />
-              
-              <div className="mt-8">
-                <Link href="/" className="text-[#86412e] hover:underline">
-                  Return to Home
-                </Link>
-              </div>
-            </div>
-          </div>
+          <CommercePromptsForm />
+          <CommerceSuggestionForm />
         </div>
       </div>
       
       {/* Right side ad */}
       <AdSidebar adSlot="5678901234" position="right" />
     </div>
-  )
+  );
 } 

@@ -318,7 +318,7 @@ export async function trackPageView(path: string) {
   }
 }
 
-// Track unique visitors - limit fingerprint storage
+// Track unique visitors - fix for not updating after initial period
 export async function trackVisitor(fingerprint: string) {
   if (!fingerprint) return;
   
@@ -330,7 +330,7 @@ export async function trackVisitor(fingerprint: string) {
       const docSnap = await transaction.get(visitorsRef);
       
       if (!docSnap.exists()) {
-        // Initialize document without storing all fingerprints
+        // Initialize document
         transaction.set(visitorsRef, {
           total: 1,
           daily: { [date]: { count: 1 } },
@@ -338,37 +338,119 @@ export async function trackVisitor(fingerprint: string) {
         });
       } else {
         const data = docSnap.data();
+        const fingerPrintHash = `${fingerprint.substring(0, 8)}`;
         
-        // Generate a date-specific key to limit fingerprint storage
-        // Store up to 5 fingerprints per day for sampling
-        const dailyKey = `fp_${date}_${Math.floor(Math.random() * 20)}`;
-        
-        // Update total count if it's a new visitor for the day
+        // Check if we have a record for today
         if (!data.daily || !data.daily[date]) {
+          // First visitor of the day
           transaction.update(visitorsRef, {
             total: increment(1),
-            lastUpdated: serverTimestamp()
-          });
-          
-          // Create new daily entry
-          transaction.update(visitorsRef, {
             [`daily.${date}`]: { 
               count: 1,
-              [dailyKey]: fingerprint.substring(0, 8) // Store truncated fingerprint as sample
-            }
+              visitors: { [fingerPrintHash]: true }
+            },
+            lastUpdated: serverTimestamp()
           });
         } else {
-          // Check if we've tracked fewer than 100 visitors today
-          const currentCount = data.daily[date].count || 0;
-          if (currentCount < 100) {
+          // Check if this fingerprint is new for today
+          const todayData = data.daily[date];
+          const visitorMap = todayData.visitors || {};
+          
+          if (!visitorMap[fingerPrintHash]) {
+            // New visitor for today
             transaction.update(visitorsRef, {
-              [`daily.${date}.count`]: increment(1)
+              total: increment(1),
+              [`daily.${date}.count`]: increment(1),
+              [`daily.${date}.visitors.${fingerPrintHash}`]: true,
+              lastUpdated: serverTimestamp()
             });
           }
         }
       }
     });
+    
+    console.log(`Visitor tracked: ${fingerprint.substring(0, 8)}`);
   } catch (error) {
     console.error("Visitor tracking error:", error);
+  }
+}
+
+// Update commerce statistics when a new score is added
+async function updateCommerceStats(newScore: number): Promise<void> {
+  const statsRef = doc(db, 'stats', 'commerce');
+  
+  try {
+    const statsDoc = await getDoc(statsRef);
+    
+    if (statsDoc.exists()) {
+      // Update existing stats
+      const data = statsDoc.data();
+      const newCount = (data.count || 0) + 1;
+      const newTotalScore = (data.totalScore || 0) + newScore;
+      const newAverage = Math.round(newTotalScore / newCount);
+      
+      await updateDoc(statsRef, {
+        count: newCount,
+        totalScore: newTotalScore,
+        average: newAverage,
+        lastUpdated: serverTimestamp()
+      });
+    } else {
+      // Create new stats document
+      await setDoc(statsRef, {
+        count: 1,
+        totalScore: newScore,
+        average: newScore,
+        lastUpdated: serverTimestamp()
+      });
+    }
+  } catch (error) {
+    console.error('Error updating commerce stats:', error);
+    // Don't throw - we want to save the score even if stats update fails
+  }
+}
+
+// Save commerce test score to Firestore
+export async function saveCommerceScore(score: number): Promise<string> {
+  try {
+    console.log('Starting to save commerce score:', score);
+    
+    // First, save the score without timestamp to match rules
+    const scoreRef = await addDoc(collection(db, 'commerceScores'), {
+      score // only include score field, no timestamp
+    });
+    
+    console.log('Score saved with ID:', scoreRef.id);
+    
+    // Then update stats separately
+    await updateCommerceStats(score);
+    
+    return scoreRef.id;
+  } catch (error) {
+    console.error('Error in saveCommerceScore:', error);
+    throw error;
+  }
+}
+
+// Get commerce test statistics
+export async function getCommerceStats(): Promise<{average: number, count: number}> {
+  try {
+    const statsRef = doc(db, 'stats', 'commerce');
+    const statsDoc = await getDoc(statsRef);
+    
+    if (statsDoc.exists()) {
+      const data = statsDoc.data();
+      return {
+        average: data.average || 0,
+        count: data.count || 0
+      };
+    } else {
+      // If no stats document exists yet, return defaults
+      return { average: 50, count: 0 };
+    }
+  } catch (error) {
+    console.error("Error getting commerce stats:", error);
+    // Return defaults if there's an error
+    return { average: 50, count: 0 };
   }
 } 

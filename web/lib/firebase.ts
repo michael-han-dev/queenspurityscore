@@ -15,11 +15,13 @@ const firebaseConfig = {
 let app: FirebaseApp;
 let db: Firestore;
 
-// Check if Firebase has been initialized
+
 if (!getApps().length) {
   app = initializeApp(firebaseConfig);
+  console.log('Firebase initialized with project:', firebaseConfig.projectId);
 } else {
   app = getApps()[0];
+  console.log('Using existing Firebase app');
 }
 
 db = getFirestore(app);

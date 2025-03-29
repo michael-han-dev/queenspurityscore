@@ -36,7 +36,7 @@ const engineeringQuestions = [
   "Done the Ritual bar",
   "Gone to homecoming ritual",
   "Engineer and a Varsity athlete",
-  "Travelled outside of Canada for your any engineering related activity",
+  "Travelled outside of Canada for any engineering related activity",
   "Done a midterm using ChatGPT",
   "Taken a Commerce course",
   "Have more than 3 bars on your jacket",
@@ -136,7 +136,7 @@ function EngineeringSuggestionForm() {
 
   return (
     <div className="mt-8 p-4 border border-[#d4c9a8] rounded-md bg-[#f8f3e6]">
-      <h3 className="text-lg font-medium mb-2 text-center">Suggest a New Engineering Prompt</h3>
+      <h3 className="text-lg font-medium mb-2 text-center">Suggest a New Engineering Question</h3>
       <form onSubmit={handleSubmit} className="space-y-2">
         <input
           type="text"
