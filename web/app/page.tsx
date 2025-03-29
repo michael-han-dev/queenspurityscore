@@ -47,7 +47,7 @@ export default function Home() {
             <Link href="/commerce" className="test-option bg-[#f8f3e6] border-2 border-[#9e9176] p-4 rounded-md text-center hover:bg-[#f0e9d6] transition-colors">
               <h3 className="font-medium text-lg text-[#86412e] mb-2">Commerce Test</h3>
               <p className="text-sm text-[#5d5345]">
-                Commerce Specific Test
+                Commerce Specific Test (Updated March 29, 2025)
               </p>
             </Link>
             
