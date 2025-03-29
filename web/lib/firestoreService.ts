@@ -252,27 +252,31 @@ export async function saveFacultySuggestion(
   }
 }
 
-// Track page view with properly encoded paths
+// Track page view with properly encoded paths - skip results pages
 export async function trackPageView(path: string) {
   try {
     if (!path) return;
+    
+    // Skip tracking results pages to prevent database spam
+    if (path.includes('/results') || path.includes('/engineering/results')) {
+      console.log(`Skipping tracking for results page: ${path}`);
+      return;
+    }
     
     // Encode the path to be Firestore-safe (replace / with _ and other invalid chars)
     const encodedPath = path.replace(/[/\[\].~*]/g, '_');
     const date = new Date().toISOString().split('T')[0];
     const analyticsRef = doc(db, 'analytics', 'pageviews');
     
-    console.log(`Tracking page view for path: ${path} (encoded as ${encodedPath})`);
-    
     await runTransaction(db, async (transaction) => {
       const docSnap = await transaction.get(analyticsRef);
       
       if (!docSnap.exists()) {
-        // Initialize document
+        // Initialize document with minimal structure
         transaction.set(analyticsRef, {
           total: 1,
           paths: { [encodedPath]: { count: 1, path } },
-          daily: { [date]: { total: 1, paths: { [encodedPath]: 1 } } },
+          daily: { [date]: { total: 1 } },
           lastUpdated: serverTimestamp()
         });
       } else {
@@ -295,45 +299,30 @@ export async function trackPageView(path: string) {
           });
         }
         
-        // Update daily counts
+        // Only update daily total, not individual paths
         if (data.daily && data.daily[date]) {
           transaction.update(analyticsRef, {
             [`daily.${date}.total`]: increment(1)
           });
-          
-          if (data.daily[date].paths && data.daily[date].paths[encodedPath]) {
-            transaction.update(analyticsRef, {
-              [`daily.${date}.paths.${encodedPath}`]: increment(1)
-            });
-          } else {
-            transaction.update(analyticsRef, {
-              [`daily.${date}.paths.${encodedPath}`]: 1
-            });
-          }
         } else {
           transaction.update(analyticsRef, {
-            [`daily.${date}`]: {
-              total: 1,
-              paths: { [encodedPath]: 1 }
-            }
+            [`daily.${date}`]: { total: 1 }
           });
         }
       }
     });
     
-    console.log(`Successfully tracked page view for: ${path}`);
+    console.log(`Tracked page view for: ${path}`);
   } catch (error) {
     console.error("Analytics error:", error);
   }
 }
 
-// Track unique visitors
+// Track unique visitors - limit fingerprint storage
 export async function trackVisitor(fingerprint: string) {
   if (!fingerprint) return;
   
   try {
-    console.log(`Tracking visitor with fingerprint: ${fingerprint.substring(0, 8)}...`);
-    
     const date = new Date().toISOString().split('T')[0];
     const visitorsRef = doc(db, 'analytics', 'visitors');
     
@@ -341,52 +330,44 @@ export async function trackVisitor(fingerprint: string) {
       const docSnap = await transaction.get(visitorsRef);
       
       if (!docSnap.exists()) {
-        // Initialize document
+        // Initialize document without storing all fingerprints
         transaction.set(visitorsRef, {
           total: 1,
-          fingerprints: { [fingerprint]: true },
-          daily: { [date]: { count: 1, fingerprints: { [fingerprint]: true } } },
+          daily: { [date]: { count: 1 } },
           lastUpdated: serverTimestamp()
         });
-        console.log('Created new visitors document');
       } else {
         const data = docSnap.data();
-        const isNewVisitor = !data.fingerprints || !data.fingerprints[fingerprint];
         
-        // Only increment total for new visitors
-        if (isNewVisitor) {
+        // Generate a date-specific key to limit fingerprint storage
+        // Store up to 5 fingerprints per day for sampling
+        const dailyKey = `fp_${date}_${Math.floor(Math.random() * 20)}`;
+        
+        // Update total count if it's a new visitor for the day
+        if (!data.daily || !data.daily[date]) {
           transaction.update(visitorsRef, {
             total: increment(1),
-            [`fingerprints.${fingerprint}`]: true,
             lastUpdated: serverTimestamp()
           });
-          console.log('Tracked new visitor');
-        } else {
-          console.log('Returning visitor detected');
-        }
-        
-        // Update daily visitor count
-        if (data.daily && data.daily[date]) {
-          if (!data.daily[date].fingerprints || !data.daily[date].fingerprints[fingerprint]) {
-            transaction.update(visitorsRef, {
-              [`daily.${date}.count`]: increment(1),
-              [`daily.${date}.fingerprints.${fingerprint}`]: true
-            });
-            console.log('Added visitor to daily count');
-          }
-        } else {
+          
+          // Create new daily entry
           transaction.update(visitorsRef, {
-            [`daily.${date}`]: {
+            [`daily.${date}`]: { 
               count: 1,
-              fingerprints: { [fingerprint]: true }
+              [dailyKey]: fingerprint.substring(0, 8) // Store truncated fingerprint as sample
             }
           });
-          console.log('Created new daily entry for visitors');
+        } else {
+          // Check if we've tracked fewer than 100 visitors today
+          const currentCount = data.daily[date].count || 0;
+          if (currentCount < 100) {
+            transaction.update(visitorsRef, {
+              [`daily.${date}.count`]: increment(1)
+            });
+          }
         }
       }
     });
-    
-    console.log('Visitor tracking completed successfully');
   } catch (error) {
     console.error("Visitor tracking error:", error);
   }

@@ -28,33 +28,26 @@ export function CustomAnalytics() {
   const visitorTrackedRef = useRef<boolean>(false);
   
   useEffect(() => {
+    // Only run in browser
     if (typeof window === 'undefined') return;
     
     // Combine path and search params for full URL tracking
     const path = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '');
     
-    // Check if this is a new page load or a client-side navigation
-    const isPageLoad = !prevPathRef.current;
+    // Skip tracking if on results pages
+    const isResultsPage = path.includes('/results') || path.includes('/engineering/results');
     
-
-    if (isPageLoad || !visitorTrackedRef.current) {
-
+    // Track unique visitor on first load only
+    if (!visitorTrackedRef.current && !isResultsPage) {
       const fingerprint = generateFingerprint();
-      
-      // Always track visitor on page load - sessionStorage might have been cleared
       trackVisitor(fingerprint);
-      sessionStorage.setItem('visitorTracked', 'true');
-      sessionStorage.setItem('visitorFingerprint', fingerprint);
-      console.log('Visitor tracked with fingerprint');
-      
       visitorTrackedRef.current = true;
     }
     
-    // Track page view when path changes or on initial load
-    if (path !== prevPathRef.current) {
+    // Track page view when path changes (except results pages)
+    if (path !== prevPathRef.current && !isResultsPage) {
       trackPageView(path);
       prevPathRef.current = path;
-      console.log('Page view tracked:', path);
     }
   }, [pathname, searchParams]);
   
