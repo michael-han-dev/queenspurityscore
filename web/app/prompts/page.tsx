@@ -1,14 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { PromptsForm } from './components/prompts-form'
-import { AdSidebar } from '@/components/ui/ads/ad-sidebar'
 
 export default function PromptsPage() {
   return (
-    <div className="page-container">
-      {/* Left side ad */}
-      <AdSidebar adSlot="7890123456" position="left" />
-      
+    <div className="page-container queens-background">
       <div className="container mx-auto px-4 py-8">
         <div className="rice-purity-container relative">
           {/* Home Button inside the container */}
@@ -41,13 +37,10 @@ export default function PromptsPage() {
               </h2>
             </div>
           </header>
-
+          
           <PromptsForm />
         </div>
       </div>
-      
-      {/* Right side ad */}
-      <AdSidebar adSlot="9012345678" position="right" />
     </div>
   )
 } 

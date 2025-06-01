@@ -1,14 +1,10 @@
 import Image from 'next/image'
 import { HealthSuggestionForm } from './components/health-suggestion-form'
-import { AdSidebar } from '@/components/ui/ads/ad-sidebar'
 import Link from 'next/link'
 
 export default function HealthSciencesPage() {
   return (
     <div className="page-container queens-background">
-      {/* Left side ad */}
-      <AdSidebar adSlot="8901234567" position="left" />
-      
       <div className="container mx-auto px-4 py-8">
         <div className="rice-purity-container relative">
           {/* Home Button inside the container */}
@@ -61,9 +57,6 @@ export default function HealthSciencesPage() {
           </div>
         </div>
       </div>
-      
-      {/* Right side ad */}
-      <AdSidebar adSlot="9012345678" position="right" />
     </div>
   )
 } 

@@ -6,9 +6,6 @@ import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { getFacultyAvgScore, getAllFacultyStats } from '@/lib/firestoreService'
-import { AdInArticle } from '@/components/ui/ads/ad-in-article'
-import { AdBanner } from '@/components/ui/ads/ad-banner'
-import { AdSidebar } from '@/components/ui/ads/ad-sidebar'
 
 export default function ResultsPage() {
   const searchParams = useSearchParams();
@@ -21,7 +18,6 @@ export default function ResultsPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Get parameters from URL
         const scoreParam = searchParams.get('score');
         const facultyParam = searchParams.get('faculty');
         
@@ -33,17 +29,14 @@ export default function ResultsPage() {
           const formattedFaculty = facultyParam.charAt(0).toUpperCase() + facultyParam.slice(1);
           setFaculty(formattedFaculty);
           
-          // Fetch actual average score from Firebase
           const avgScoreFromDB = await getFacultyAvgScore(facultyParam.toLowerCase());
           setAvgScore(avgScoreFromDB);
           
-          // Fetch all faculty stats
           const allStats = await getAllFacultyStats();
           setAllFacultyStats(allStats);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        // Use fallback values if Firebase fetch fails
         setAvgScore(getDefaultAvgScore(faculty.toLowerCase()));
         setAllFacultyStats(getDefaultFacultyStats());
       } finally {
@@ -54,7 +47,6 @@ export default function ResultsPage() {
     fetchData();
   }, [searchParams]);
   
-  // Fallback function for average scores if Firebase fails
   const getDefaultAvgScore = (faculty: string): number => {
     const mockAvgScores: Record<string, number> = {
       asus: 58,
@@ -66,7 +58,6 @@ export default function ResultsPage() {
     return mockAvgScores[faculty] || 60;
   };
   
-  // Fallback function for all faculty stats if Firebase fails
   const getDefaultFacultyStats = (): Record<string, any> => {
     return {
       asus: { avgScore: 58, count: 12, displayName: "Arts and Science" },
@@ -76,7 +67,6 @@ export default function ResultsPage() {
     };
   };
   
-  // Get message based on score
   const getScoreMessage = (score: number): string => {
     if (score >= 90) return "Wow, you're practically an angel! Pure as the driven snow.";
     if (score >= 70) return "You're pretty innocent, but you've had some fun.";
@@ -114,9 +104,6 @@ export default function ResultsPage() {
 
   return (
     <div className="page-container">
-      {/* Left side ad */}
-      <AdSidebar adSlot="4567890123" position="left" />
-      
       <div className="container mx-auto px-4 py-8 sm:py-12">
         <div className="rice-purity-container">
           <header className="rice-header">
@@ -149,7 +136,6 @@ export default function ResultsPage() {
               <p>Average score for {faculty}: <span className="font-medium">{avgScore}</span></p>
             </div>
             
-            {/* Faculty Stats Comparison */}
             <div className="bg-[#f8f3e6] border border-[#d4c9a8] p-4 rounded-md mb-6">
               <h3 className="text-lg font-medium text-[#86412e] mb-2">Faculty Comparison</h3>
               
@@ -169,8 +155,6 @@ export default function ResultsPage() {
                 ))}
               </div>
             </div>
-            
-            <AdInArticle adSlot="9012345678" />
             
             <p className="text-sm bg-[#f8f3e6] p-3 border border-[#9e9176] rounded max-w-md mx-auto mt-6">
               The Rice Purity Test score ranges from 0 to 100, with 100 being the most pure. 
@@ -192,24 +176,14 @@ export default function ResultsPage() {
             </Link>
           </div>
           
-          <AdBanner adSlot="3456789012" className="mt-8" />
-          
           <div className="mt-6 text-center text-xs text-gray-700" id="ThresherBottomText">
             <p>
               Your results have been anonymously recorded for faculty comparison statistics.
               No personally identifiable information was stored.
             </p>
-            <p className="mt-4">
-              <a href="https://ricepuritytest.com" className="text-[#86412e] hover:underline" target="_blank" rel="noopener noreferrer">
-                View the original Rice Purity Test
-              </a>
-            </p>
           </div>
         </div>
       </div>
-      
-      {/* Right side ad */}
-      <AdSidebar adSlot="6789012345" position="right" />
     </div>
-  )
+  );
 } 

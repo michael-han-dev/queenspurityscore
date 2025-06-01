@@ -1,15 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { CommercePromptsForm } from './components/commerce-prompts-form'
-import { CommerceSuggestionForm } from './components/commerce-suggestion-form'
-import { AdSidebar } from '@/components/ui/ads/ad-sidebar'
+import { Button } from '@/components/ui/button'
 
 export default function CommercePage() {
   return (
     <div className="page-container queens-background">
-      {/* Left side ad */}
-      <AdSidebar adSlot="4567890123" position="left" />
-      
       <div className="container mx-auto px-4 py-8">
         <div className="rice-purity-container relative">
           {/* Home Button inside the container */}
@@ -35,21 +30,19 @@ export default function CommercePage() {
                 className="mb-3"
               />
               <h1 className="rice-title">
-                <span className="thresher-font">The</span> Qcomm Purity Test
+                <span className="thresher-font">The</span> Queen's Commerce Purity Test
               </h1>
-              <h2 className="rice-subtitle">
-                Check the boxes for commerce acts that you have done
-              </h2>
+              <h2 className="rice-subtitle">How pure is your business ethics?</h2>
             </div>
           </header>
-
-          <CommercePromptsForm />
-          <CommerceSuggestionForm />
+          
+          <div className="text-center mb-8">
+            <Link href="/commerce/prompts">
+              <Button className="rice-button">Start the Commerce Test</Button>
+            </Link>
+          </div>
         </div>
       </div>
-      
-      {/* Right side ad */}
-      <AdSidebar adSlot="5678901234" position="right" />
     </div>
-  );
+  )
 } 

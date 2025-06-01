@@ -124,7 +124,6 @@ function EngineeringSuggestionForm() {
       await saveFacultySuggestion(suggestion, 'engineering');
       setMessage('Thanks for your suggestion!');
       setSuggestion('');
-      // Clear message after 3 seconds
       setTimeout(() => setMessage(''), 3000);
     } catch (error) {
       console.error('Error submitting suggestion:', error);
@@ -209,6 +208,7 @@ export function EngineeringPromptsForm() {
         console.error('Error stack:', error.stack);
       }
       alert("There was an error submitting your score. Please try again.");
+    } finally {
       setIsSubmitting(false);
     }
   };

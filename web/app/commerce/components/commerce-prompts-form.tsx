@@ -40,7 +40,7 @@ const commerceQuestions = [
   "Brought business cards to a casual event",
   "Created a personal budget spreadsheet with multiple tabs and formulas",
   "Sent a cal invite for a friendly hangout",
-  "Avoided telling people you’re in commerce",
+  "Avoided telling people you're in commerce",
   "Did a coffee chat on a run",
   "Used the phrase 'circle back' or 'touch base' unironically",
   "Conducted a SWOT analysis on a personal decision",

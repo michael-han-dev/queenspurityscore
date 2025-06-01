@@ -1,14 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { EngineeringPromptsForm } from './components/engineering-prompts-form'
-import { AdSidebar } from '@/components/ui/ads/ad-sidebar'
+import { Button } from '@/components/ui/button'
 
-export default function EngineeringPromptsPage() {
+export default function EngineeringPage() {
   return (
     <div className="page-container queens-background">
-      {/* Left side ad */}
-      <AdSidebar adSlot="2345678901" position="left" />
-      
       <div className="container mx-auto px-4 py-8">
         <div className="rice-purity-container relative">
           {/* Home Button inside the container */}
@@ -36,18 +32,17 @@ export default function EngineeringPromptsPage() {
               <h1 className="rice-title">
                 <span className="thresher-font">The</span> Queen's Engineering Purity Test
               </h1>
-              <h2 className="rice-subtitle">
-                Check the boxes for engineering acts that you have done
-              </h2>
+              <h2 className="rice-subtitle">Are You a True EngiQueens?</h2>
             </div>
           </header>
-
-          <EngineeringPromptsForm />
+          
+          <div className="text-center mb-8">
+            <Link href="/engineering/prompts">
+              <Button className="rice-button">Start the Engineering Test</Button>
+            </Link>
+          </div>
         </div>
       </div>
-      
-      {/* Right side ad */}
-      <AdSidebar adSlot="3456789012" position="right" />
     </div>
   )
 } 
