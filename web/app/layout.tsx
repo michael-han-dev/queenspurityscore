@@ -65,7 +65,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Add traditional favicon link as fallback */}
         <link rel="icon" href="/favicon.ico" />
         <link rel="shortcut icon" href="/favicon.ico" />
         

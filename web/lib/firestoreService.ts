@@ -34,13 +34,11 @@ interface EngineeringStats {
 // Save a new score and update faculty statistics
 export async function saveScore({ score, faculty }: ScoreSubmission): Promise<string> {
   try {
-
     const scoreRef = await addDoc(collection(db, 'scores'), {
       score,
       faculty,
       timestamp: serverTimestamp()
     });
-
 
     await updateFacultyStats(faculty, score);
     
@@ -69,7 +67,7 @@ async function updateFacultyStats(faculty: string, newScore: number): Promise<vo
       avgScore: newAvgScore
     });
   } else {
-
+    // Create new stats document
     await setDoc(facultyStatsRef, {
       totalScore: newScore,
       count: 1,
@@ -103,7 +101,6 @@ export async function getAllFacultyStats(): Promise<Record<string, any>> {
     const allStats: Record<string, any> = {};
     
     statsSnapshot.forEach(doc => {
-
       const facultyName = doc.id.charAt(0).toUpperCase() + doc.id.slice(1);
       allStats[doc.id] = {
         ...doc.data(),
@@ -140,12 +137,10 @@ export async function getGlobalAvgScore(): Promise<number> {
 // Save a new engineering score and update statistics
 export async function saveEngineeringScore(score: number): Promise<string> {
   try {
-
     const scoreRef = await addDoc(collection(db, 'engineeringScores'), {
       score,
       timestamp: serverTimestamp()
     });
-
 
     await updateEngineeringStats(score);
     
