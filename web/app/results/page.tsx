@@ -6,9 +6,6 @@ import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { getFacultyAvgScore, getAllFacultyStats } from '@/lib/firestoreService'
-import { AdInArticle } from '@/components/ui/ads/ad-in-article'
-import { AdBanner } from '@/components/ui/ads/ad-banner'
-import { AdSidebar } from '@/components/ui/ads/ad-sidebar'
 
 export default function ResultsPage() {
   const searchParams = useSearchParams();
@@ -107,8 +104,6 @@ export default function ResultsPage() {
 
   return (
     <div className="page-container">
-      <AdSidebar adSlot="4567890123" position="left" />
-      
       <div className="container mx-auto px-4 py-8 sm:py-12">
         <div className="rice-purity-container">
           <header className="rice-header">
@@ -161,8 +156,6 @@ export default function ResultsPage() {
               </div>
             </div>
             
-            <AdInArticle adSlot="9012345678" />
-            
             <p className="text-sm bg-[#f8f3e6] p-3 border border-[#9e9176] rounded max-w-md mx-auto mt-6">
               The Rice Purity Test score ranges from 0 to 100, with 100 being the most pure. 
               Your score is based on the number of activities you have not experienced.
@@ -183,8 +176,6 @@ export default function ResultsPage() {
             </Link>
           </div>
           
-          <AdBanner adSlot="3456789012" className="mt-8" />
-          
           <div className="mt-6 text-center text-xs text-gray-700" id="ThresherBottomText">
             <p>
               Your results have been anonymously recorded for faculty comparison statistics.
@@ -193,8 +184,6 @@ export default function ResultsPage() {
           </div>
         </div>
       </div>
-      
-      <AdSidebar adSlot="5678901234" position="right" />
     </div>
   );
 } 

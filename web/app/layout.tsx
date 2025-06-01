@@ -4,6 +4,7 @@ import './globals.css'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { CustomAnalytics } from '@/components/analytics/CustomAnalytics'
 import { Analytics } from '@vercel/analytics/next';
+import Script from 'next/script'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -65,30 +66,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="shortcut icon" href="/favicon.ico" />
-        
         <meta name="google-adsense-account" content="ca-pub-5330176235227654" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                if (window.adsbygoogleInit === true) return;
-                window.adsbygoogleInit = true;
-                var script = document.createElement('script');
-                script.async = true;
-                script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5330176235227654';
-                script.crossOrigin = 'anonymous';
-                document.head.appendChild(script);
-              })();
-            `
-          }}
-        />
       </head>
       <body className={`${inter.className} queens-background`}>
+        {/* Google AdSense Auto Ads - Clean Implementation */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5330176235227654"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+        
         <main className="min-h-screen">
           {children}
         </main>
+        
         <CustomAnalytics />
         <Analytics />
         <SpeedInsights />
