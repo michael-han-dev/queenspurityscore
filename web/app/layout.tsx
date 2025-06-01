@@ -69,11 +69,19 @@ export default function RootLayout({
         <meta name="google-adsense-account" content="ca-pub-5330176235227654" />
       </head>
       <body className={`${inter.className} queens-background`}>
-        {/* Google AdSense Auto Ads - Clean Implementation */}
+        {/* Google AdSense Auto Ads */}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5330176235227654"
           crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+        
+        {/* Umami Analytics */}
+        <Script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="59998ff5-63ab-48d5-98d5-4c0aa84357d1"
           strategy="afterInteractive"
         />
         
