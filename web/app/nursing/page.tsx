@@ -1,14 +1,10 @@
 import Image from 'next/image'
 import { NursingSuggestionForm } from './components/nursing-suggestion-form'
-import { AdSidebar } from '@/components/ui/ads/ad-sidebar'
 import Link from 'next/link'
 
 export default function NursingPage() {
   return (
     <div className="page-container queens-background">
-      {/* Left side ad */}
-      <AdSidebar adSlot="6789012345" position="left" />
-      
       <div className="container mx-auto px-4 py-8">
         <div className="rice-purity-container relative">
           {/* Home Button inside the container */}
@@ -61,9 +57,6 @@ export default function NursingPage() {
           </div>
         </div>
       </div>
-      
-      {/* Right side ad */}
-      <AdSidebar adSlot="7890123456" position="right" />
     </div>
   )
 } 

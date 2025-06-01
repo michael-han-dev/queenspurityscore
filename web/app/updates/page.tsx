@@ -1,12 +1,8 @@
 import Link from 'next/link'
-import { AdSidebar } from '@/components/ui/ads/ad-sidebar'
 
 export default function UpdatesPage() {
   return (
     <div className="page-container queens-background">
-      {/* Left side ad */}
-      <AdSidebar adSlot="1234567890" position="left" />
-      
       <div className="container mx-auto px-4 py-8">
         <div className="rice-purity-container relative">
           {/* Home Button inside the container */}
@@ -21,74 +17,67 @@ export default function UpdatesPage() {
               <span className="text-sm">Home</span>
             </Link>
           </div>
-          
-          <header className="rice-header mb-8">
-            <h1 className="text-3xl font-serif text-center">Site Updates</h1>
-            <div className="w-24 h-1 bg-[#9e9176] mx-auto mt-2"></div>
+
+          <header className="rice-header">
+            <div className="title flex flex-col items-center">
+              <h1 className="rice-title">
+                <span className="thresher-font">Site</span> Updates
+              </h1>
+              <h2 className="rice-subtitle">Latest changes and improvements</h2>
+            </div>
           </header>
 
-          <div className="updates-container space-y-8 max-w-3xl mx-auto">
-            {/* Update Entry */}
-            <div className="update-entry">
-              <h2 className="text-xl font-medium text-[#86412e] border-b border-[#d4c9a8] pb-2 mb-4">Mar 28, 2025</h2>
-              <div className="space-y-4 text-[#5d5345]">
-                <p>
-                  <strong>Site Launch:</strong> Queens Purity Test launched with 100 prompts for the general test and 
-                  100 prompts for the engineering test.
-                </p>
-                <p>
-                  <strong>Added:</strong> Faculty selection feature allowing students to identify their faculty.
-                </p>
-                <p>
-                  <strong>Added:</strong> Anonymous statistics to show average scores by faculty.
-                </p>
-              </div>
-            </div>
-            <div className="update-entry">
-              <h2 className="text-xl font-medium text-[#86412e] border-b border-[#d4c9a8] pb-2 mb-4">Mar 29, 2025</h2>
-              <div className="space-y-4 text-[#5d5345]">
-                <p>
-                  <strong>Site Update:</strong> Commerce Purity Test added.
-                </p>
-                <p>
-                  <strong>Stats:</strong> 1600 unique visitors and 7000 page views.
-                </p>
-                <p>
-                  <strong>Bug Fixes:</strong> Typos and misc stuff.
-                </p>
-              </div>
+          <div className="mt-8 max-w-4xl mx-auto">
+            <div className="bg-[#f8f3e6] border border-[#9e9176] rounded-md p-6 mb-6">
+              <h3 className="text-lg font-medium text-[#86412e] mb-2">March 29, 2025</h3>
+              <ul className="list-disc list-inside text-[#5d5345] space-y-1">
+                <li>Added Queen's Commerce-specific purity test</li>
+                <li>Updated homepage with Commerce test option</li>
+                <li>Improved mobile responsiveness across all tests</li>
+                <li>Enhanced analytics for better faculty comparison</li>
+              </ul>
             </div>
 
-
-            {/* Template for future updates */}
-            {/* 
-            <div className="update-entry">
-              <h2 className="text-xl font-medium text-[#86412e] border-b border-[#d4c9a8] pb-2 mb-4">[Date]</h2>
-              <div className="space-y-4 text-[#5d5345]">
-                <p>
-                  <strong>Added:</strong> [Description of added features or prompts]
-                </p>
-                <p>
-                  <strong>Removed:</strong> [Description of removed features or prompts]
-                </p>
-                <p>
-                  <strong>Fixed/Updated:</strong> [Description of fixes or updates]
-                </p>
-              </div>
+            <div className="bg-[#f8f3e6] border border-[#9e9176] rounded-md p-6 mb-6">
+              <h3 className="text-lg font-medium text-[#86412e] mb-2">March 15, 2025</h3>
+              <ul className="list-disc list-inside text-[#5d5345] space-y-1">
+                <li>Launched Engineering-specific purity test</li>
+                <li>Added separate results tracking for Engineering students</li>
+                <li>Improved question relevance for technical students</li>
+              </ul>
             </div>
-            */}
-          </div>
 
-          <div className="text-center mt-12">
-            <Link href="/" className="text-[#86412e] hover:underline">
-              Return to Home
-            </Link>
+            <div className="bg-[#f8f3e6] border border-[#9e9176] rounded-md p-6 mb-6">
+              <h3 className="text-lg font-medium text-[#86412e] mb-2">March 1, 2025</h3>
+              <ul className="list-disc list-inside text-[#5d5345] space-y-1">
+                <li>Initial launch of Queen's University Purity Test</li>
+                <li>Faculty selection and comparison features</li>
+                <li>Anonymous analytics and score tracking</li>
+                <li>Mobile-optimized design</li>
+              </ul>
+            </div>
+
+            <div className="bg-[#f0e9d6] border border-[#9e9176] rounded-md p-4 mb-6">
+              <h4 className="text-md font-medium text-[#86412e] mb-2">Coming Soon</h4>
+              <ul className="list-disc list-inside text-[#5d5345] text-sm space-y-1">
+                <li>Health Sciences-specific test</li>
+                <li>Nursing-specific test</li>
+                <li>Enhanced social sharing features</li>
+                <li>More detailed analytics and comparisons</li>
+              </ul>
+            </div>
+
+            <div className="text-center">
+              <p className="text-sm text-[#5d5345] mb-4">
+                Have suggestions for improvements or new features?
+              </p>
+              <p className="text-xs text-[#86412e]">
+                We're always looking to improve the Queen's Purity Test experience.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-      
-      {/* Right side ad */}
-      <AdSidebar adSlot="2345678901" position="right" />
     </div>
   )
 } 

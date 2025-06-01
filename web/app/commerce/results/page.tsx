@@ -1,154 +1,137 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { AdSidebar } from '@/components/ui/ads/ad-sidebar'
 import { getCommerceStats } from '@/lib/firestoreService'
-
-interface CommerceStats {
-  averageScore: number;
-  responseCount: number;
-}
 
 export default function CommerceResultsPage() {
   const searchParams = useSearchParams();
-  const [loading, setLoading] = useState(true);
-  const [commerceStats, setCommerceStats] = useState<CommerceStats | null>(null);
-  const [error, setError] = useState('');
-  
-  // Get the score from URL parameters
-  const score = searchParams.get('score') ? parseInt(searchParams.get('score') as string) : null;
-  const totalQuestions = searchParams.get('total') ? parseInt(searchParams.get('total') as string) : 100;
+  const [score, setScore] = useState<number>(0);
+  const [avgScore, setAvgScore] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    async function fetchStats() {
+    const fetchData = async () => {
       try {
-        // Fetch commerce stats from Firebase
+        const scoreParam = searchParams.get('score');
+        
+        if (scoreParam) {
+          setScore(parseInt(scoreParam, 10));
+        }
+        
         const stats = await getCommerceStats();
-        setCommerceStats({
-          averageScore: stats.average,
-          responseCount: stats.count
-        });
-      } catch (err) {
-        console.error('Error fetching stats:', err);
-        setError('Failed to load statistics. Please try again later.');
+        setAvgScore(stats.average);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setAvgScore(45); // Default commerce average
       } finally {
         setLoading(false);
       }
-    }
-
-    fetchStats();
-  }, []);
-
-  // Function to get interpretation message based on score
-  const getScoreInterpretation = (score: number): string => {
-    if (score >= 90) return "You're a Commerce student in name only. Have you even been to Goodes Hall?";
-    if (score >= 70) return "You've done the bare minimum to identify as a Commerce student.";
-    if (score >= 50) return "You're a textbook Commerce student, complete with the networking and Excel skills.";
-    if (score >= 30) return "Your LinkedIn is probably impeccable. Coffee chats are your love language.";
-    return "You embody the Commerce stereotype. Your parents are probably very proud, or concerned.";
-  };
-
-  // Calculate percentage and comparison message
-  const calculateComparison = (): string => {
-    if (!score || !commerceStats?.averageScore) return "";
+    };
     
-    const diff = score - commerceStats.averageScore;
-    if (Math.abs(diff) < 5) return "Your score is about average for Commerce students.";
-    if (diff > 0) return `You scored ${diff.toFixed(1)} points higher than the average Commerce student.`;
-    return `You scored ${Math.abs(diff).toFixed(1)} points lower than the average Commerce student.`;
+    fetchData();
+  }, [searchParams]);
+  
+  const getScoreMessage = (score: number): string => {
+    if (score >= 90) return "Wow, you're practically an angel! Pure as the driven snow.";
+    if (score >= 70) return "You're pretty innocent, but you've had some fun.";
+    if (score >= 50) return "You're right in the middle - a good balance of innocence and experience.";
+    if (score >= 30) return "You've lived quite an adventurous life!";
+    return "You've really experienced everything life has to offer, haven't you?";
   };
 
-  return (
-    <div className="page-container">
-      {/* Left side ad */}
-      <AdSidebar adSlot="5678901234" position="left" />
-      
-      <div className="container mx-auto px-4 py-8">
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8 sm:py-12">
         <div className="rice-purity-container">
           <header className="rice-header">
-            <div className="flex flex-col items-center">
+            <div className="title flex flex-col items-center">
               <Image 
                 src="/images/purity-test.png" 
                 alt="Rice Purity Test Logo"
-                width={200}
-                height={200}
+                width={360}
+                height={360}
                 className="mb-3"
               />
               <h1 className="rice-title">
-                <span className="thresher-font">Your</span> Commerce Purity Score
+                <span className="thresher-font">The</span> Commerce Purity Test
               </h1>
             </div>
           </header>
-
-          {loading ? (
-            <div className="text-center py-10">
-              <p className="text-[#302616]">Calculating your business acumen...</p>
-            </div>
-          ) : 
-          (
-            <>
-              {score !== null ? (
-                <div className="score-display flex flex-col items-center mt-8">
-                  <div className="score-circle bg-[#f0e9d6] border-4 border-[#9e9176] rounded-full w-40 h-40 flex items-center justify-center mb-6">
-                    <span className="text-4xl font-bold text-[#86412e]">{score}</span>
-                  </div>
-                  
-                  <p className="text-xl text-center mb-4">
-                    {getScoreInterpretation(score)}
-                  </p>
-                  
-                  <div className="stats bg-[#f8f3e6] border border-[#d4c9a8] p-4 rounded-md w-full max-w-md mb-8">
-                    <h3 className="text-center text-lg font-medium mb-2">Commerce Statistics</h3>
-                    
-                    {commerceStats ? (
-                      <>
-                        <div className="stat-row flex justify-between py-1 border-b border-[#e5dcc3]">
-                          <span>Average Score:</span>
-                          <span className="font-medium">{commerceStats.averageScore.toFixed(1)}</span>
-                        </div>
-                        
-                        <p className="text-center mt-4 text-sm italic">
-                          {calculateComparison()}
-                        </p>
-                      </>
-                    ) : (
-                      <p className="text-center text-sm italic">Stats temporarily unavailable</p>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <div className="error-message text-center py-10">
-                  <p className="text-red-600">No score was provided. Please take the test first.</p>
-                  <Link href="/commerce" className="block mt-4 text-[#86412e] hover:underline">
-                    Take Commerce Purity Test
-                  </Link>
-                </div>
-              )}
-              
-              <div className="text-center space-y-4">
-                <Link href="/commerce">
-                  <Button className="rice-button">
-                    Take the Test Again
-                  </Button>
-                </Link>
-                
-                <div>
-                  <Link href="/" className="block mt-4 text-sm text-[#86412e] hover:underline">
-                    Return to Home Page
-                  </Link>
-                </div>
-              </div>
-            </>
-          )}
+          <div className="text-center py-8">
+            <p className="text-lg">Calculating your results...</p>
+            <p className="text-sm mt-2 text-gray-700">Please wait a moment</p>
+          </div>
         </div>
       </div>
-      
-      {/* Right side ad */}
-      <AdSidebar adSlot="8901234567" position="right" />
+    );
+  }
+
+  return (
+    <div className="page-container">
+      <div className="container mx-auto px-4 py-8 sm:py-12">
+        <div className="rice-purity-container">
+          <header className="rice-header">
+            <div className="title flex flex-col items-center">
+              <Image 
+                src="/images/purity-test.png" 
+                alt="Rice Purity Test Logo"
+                width={300}
+                height={300}
+                className="mb-3"
+              />
+              <h1 className="rice-title">
+                <span className="thresher-font">The</span> Commerce Purity Test
+              </h1>
+              <h2 className="rice-subtitle">Your Results</h2>
+            </div>
+          </header>
+
+          <div className="text-center mb-10">
+            <div className="score-circle mb-6">
+              <span className="text-5xl sm:text-6xl font-bold text-[#86412e]">{score}</span>
+            </div>
+            
+            <p className="text-xl font-medium mb-4 text-[#302616]">
+              {getScoreMessage(score)}
+            </p>
+            
+            <div className="text-sm text-[#302616] mb-6">
+              <p>Faculty: <span className="font-medium">Commerce</span></p>
+              <p>Average score for Commerce: <span className="font-medium">{avgScore}</span></p>
+            </div>
+            
+            <p className="text-sm bg-[#f8f3e6] p-3 border border-[#9e9176] rounded max-w-md mx-auto mt-6">
+              The Commerce Purity Test score ranges from 0 to 100, with 100 being the most pure. 
+              Your score is based on the number of activities you have not experienced.
+            </p>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/commerce/prompts">
+              <Button className="rice-button">
+                Take The Test Again
+              </Button>
+            </Link>
+            
+            <Link href="/">
+              <Button className="rice-button">
+                Return to Home
+              </Button>
+            </Link>
+          </div>
+          
+          <div className="mt-6 text-center text-xs text-gray-700" id="ThresherBottomText">
+            <p>
+              Your results have been anonymously recorded for faculty comparison statistics.
+              No personally identifiable information was stored.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
