@@ -125,7 +125,6 @@ function SuggestionForm() {
       await saveSuggestion(suggestion, 'regular');
       setMessage('Thanks for your suggestion!');
       setSuggestion('');
-      // Clear message after 3 seconds
       setTimeout(() => setMessage(''), 3000);
     } catch (error) {
       console.error('Error submitting suggestion:', error);
@@ -199,13 +198,14 @@ export function PromptsForm() {
     }
 
     setIsSubmitting(true);
+    setError("");
 
     try {
       // Calculate score: 100 minus the percentage of checked boxes
       const checkedCount = checkedPrompts.filter(checked => checked).length;
       const score = Math.round(100 - (checkedCount / questions.length * 100));
       
-      console.log('Submitting score:', score, 'for faculty:', faculty);
+      console.log('Submitting score:', score, 'Faculty:', faculty);
 
       // Save score to Firebase
       const result = await saveScore({ 
@@ -226,6 +226,7 @@ export function PromptsForm() {
         console.error('Error stack:', error.stack);
       }
       alert("There was an error submitting your score. Please try again.");
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -249,11 +250,11 @@ export function PromptsForm() {
             <div key={index} className="prompt-item">
               <label>
                 <span className="prompt-number">{questionNumber}.</span>
-              <input
-                type="checkbox"
-                checked={checkedPrompts[index]}
-                onChange={() => handleCheckboxChange(index)}
-              />
+                <input
+                  type="checkbox"
+                  checked={checkedPrompts[index]}
+                  onChange={() => handleCheckboxChange(index)}
+                />
                 <span className="prompt-text">{question}</span>
               </label>
             </div>

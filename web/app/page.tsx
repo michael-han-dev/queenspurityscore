@@ -6,7 +6,6 @@ import { AdSidebar } from '@/components/ui/ads/ad-sidebar'
 export default function Home() {
   return (
     <div className="page-container">
-      {/* Left side ad */}
       <AdSidebar adSlot="1234567890" position="left" />
       
       <div className="container mx-auto px-4 py-8 sm:py-12">
@@ -88,7 +87,6 @@ export default function Home() {
         </div>
       </div>
       
-      {/* Right side ad */}
       <AdSidebar adSlot="6789012345" position="right" />
     </div>
   )
