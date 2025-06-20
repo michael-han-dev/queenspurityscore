@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { EngineeringPromptsForm } from './components/engineering-prompts-form'
 
 export default function EngineeringPage() {
   return (
@@ -36,11 +36,7 @@ export default function EngineeringPage() {
             </div>
           </header>
           
-          <div className="text-center mb-8">
-            <Link href="/engineering/prompts">
-              <Button className="rice-button">Start the Engineering Test</Button>
-            </Link>
-          </div>
+          <EngineeringPromptsForm />
         </div>
       </div>
     </div>
